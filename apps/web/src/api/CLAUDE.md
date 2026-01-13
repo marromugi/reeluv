@@ -17,6 +17,9 @@ api/
 │       │   └── {entity}Repository.ts
 │       └── service/
 │           └── {entity}Service.ts
+├── infrastructure/             # インフラストラクチャ層
+│   └── repository/
+│       └── Drizzle{entity}Repository.ts
 └── middleware/                 # ミドルウェア
 ```
 
