@@ -42,11 +42,12 @@ export default defineConfig({
       },
       {
         // api test
-        extends: true,
         test: {
           name: 'api',
+          globals: true,
           include: ['src/api/**/*.{test,spec}.{ts,tsx}'],
           environment: 'happy-dom',
+          setupFiles: ['./vitest.setup.api.ts'],
         },
       },
       {

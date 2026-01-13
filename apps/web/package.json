@@ -17,10 +17,12 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "generate:icons": "tsx script/iconGenerator/main.ts"
   },
   "dependencies": {
     "hono": "^4.11.4",
+    "nanoid": "^5.1.6",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -46,7 +48,11 @@
     "msw": "^2.12.7",
     "playwright": "^1.57.0",
     "storybook": "^10.1.11",
+    "svgo": "^4.0.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwind-variants": "^3.2.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vite": "^7.3.1"
   }
