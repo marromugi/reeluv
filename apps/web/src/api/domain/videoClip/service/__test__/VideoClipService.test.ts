@@ -1,8 +1,15 @@
-import { MixedVideoStandardError } from '../../../shared/error/DomainError'
+import {
+  ClipInUseError,
+  ClipNotFoundError,
+  ClipNotSoftDeletedError,
+  MixedVideoStandardError,
+} from '../../../shared/error/DomainError'
 import { Timecode } from '../../../shared/valueObject/Timecode'
 import { VideoDefinition } from '../../../shared/valueObject/VideoDefinition'
 import { VideoStandard } from '../../../shared/valueObject/VideoStandard'
 import { VideoClip } from '../../entity/VideoClip'
+import type { VideoClipRepository } from '../../repository/VideoClipRepository'
+import { VideoClipId } from '../../valueObject/VideoClipId'
 import { VideoClipService } from '../VideoClipService'
 
 describe('VideoClipService', () => {
@@ -24,12 +31,7 @@ describe('VideoClipService', () => {
 
   describe('calculateDuration', () => {
     it('クリップの再生時間を返す', () => {
-      const clip = createClip(
-        'Test',
-        VideoStandard.pal(),
-        VideoDefinition.sd(),
-        '00:00:30:12'
-      )
+      const clip = createClip('Test', VideoStandard.pal(), VideoDefinition.sd(), '00:00:30:12')
 
       const duration = service.calculateDuration(clip)
 
@@ -61,9 +63,7 @@ describe('VideoClipService', () => {
         createClip('NTSC', VideoStandard.ntsc(), VideoDefinition.sd(), '00:00:30:00'),
       ]
 
-      expect(() => service.calculateTotalDuration(clips)).toThrow(
-        MixedVideoStandardError
-      )
+      expect(() => service.calculateTotalDuration(clips)).toThrow(MixedVideoStandardError)
     })
   })
 
@@ -162,6 +162,173 @@ describe('VideoClipService', () => {
       const total = service.calculateTotalDuration(clips)
 
       expect(total.toString()).toBe('00:00:54:08')
+    })
+  })
+
+  describe('hardDeleteClip', () => {
+    const createDeletedClip = (id: string) =>
+      VideoClip.reconstruct({
+        id: VideoClipId.fromString(id),
+        name: 'Deleted Clip',
+        description: null,
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+        startTimecode: Timecode.fromString('00:00:00:00', VideoStandard.pal()),
+        endTimecode: Timecode.fromString('00:00:10:00', VideoStandard.pal()),
+        deletedAt: new Date(),
+      })
+
+    const createActiveClip = (id: string) =>
+      VideoClip.reconstruct({
+        id: VideoClipId.fromString(id),
+        name: 'Active Clip',
+        description: null,
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+        startTimecode: Timecode.fromString('00:00:00:00', VideoStandard.pal()),
+        endTimecode: Timecode.fromString('00:00:10:00', VideoStandard.pal()),
+        deletedAt: null,
+      })
+
+    it('ソフトデリート済みで参照されていないクリップを物理削除できる', async () => {
+      const clipId = VideoClipId.fromString('deleted-orphan-id')
+      const mockRepository: VideoClipRepository = {
+        findById: vi.fn(),
+        findByIds: vi.fn(),
+        findAll: vi.fn(),
+        findCompatible: vi.fn(),
+        save: vi.fn(),
+        delete: vi.fn(),
+        exists: vi.fn(),
+        findByIdIncludingDeleted: vi.fn().mockResolvedValue(createDeletedClip('deleted-orphan-id')),
+        findByIdsIncludingDeleted: vi.fn(),
+        findDeleted: vi.fn(),
+        restore: vi.fn(),
+        hardDelete: vi.fn().mockResolvedValue(undefined),
+        isOrphaned: vi.fn().mockResolvedValue(true),
+      }
+
+      const serviceWithRepo = new VideoClipService(mockRepository)
+      await serviceWithRepo.hardDeleteClip(clipId)
+
+      expect(mockRepository.hardDelete).toHaveBeenCalledWith(clipId)
+    })
+
+    it('クリップが見つからない場合はエラーになる', async () => {
+      const clipId = VideoClipId.fromString('not-found-id')
+      const mockRepository: VideoClipRepository = {
+        findById: vi.fn(),
+        findByIds: vi.fn(),
+        findAll: vi.fn(),
+        findCompatible: vi.fn(),
+        save: vi.fn(),
+        delete: vi.fn(),
+        exists: vi.fn(),
+        findByIdIncludingDeleted: vi.fn().mockResolvedValue(null),
+        findByIdsIncludingDeleted: vi.fn(),
+        findDeleted: vi.fn(),
+        restore: vi.fn(),
+        hardDelete: vi.fn(),
+        isOrphaned: vi.fn(),
+      }
+
+      const serviceWithRepo = new VideoClipService(mockRepository)
+      await expect(serviceWithRepo.hardDeleteClip(clipId)).rejects.toThrow(ClipNotFoundError)
+    })
+
+    it('ソフトデリートされていない場合はエラーになる', async () => {
+      const clipId = VideoClipId.fromString('active-id')
+      const mockRepository: VideoClipRepository = {
+        findById: vi.fn(),
+        findByIds: vi.fn(),
+        findAll: vi.fn(),
+        findCompatible: vi.fn(),
+        save: vi.fn(),
+        delete: vi.fn(),
+        exists: vi.fn(),
+        findByIdIncludingDeleted: vi.fn().mockResolvedValue(createActiveClip('active-id')),
+        findByIdsIncludingDeleted: vi.fn(),
+        findDeleted: vi.fn(),
+        restore: vi.fn(),
+        hardDelete: vi.fn(),
+        isOrphaned: vi.fn(),
+      }
+
+      const serviceWithRepo = new VideoClipService(mockRepository)
+      await expect(serviceWithRepo.hardDeleteClip(clipId)).rejects.toThrow(ClipNotSoftDeletedError)
+    })
+
+    it('ShowReelから参照されている場合はエラーになる', async () => {
+      const clipId = VideoClipId.fromString('in-use-id')
+      const mockRepository: VideoClipRepository = {
+        findById: vi.fn(),
+        findByIds: vi.fn(),
+        findAll: vi.fn(),
+        findCompatible: vi.fn(),
+        save: vi.fn(),
+        delete: vi.fn(),
+        exists: vi.fn(),
+        findByIdIncludingDeleted: vi.fn().mockResolvedValue(createDeletedClip('in-use-id')),
+        findByIdsIncludingDeleted: vi.fn(),
+        findDeleted: vi.fn(),
+        restore: vi.fn(),
+        hardDelete: vi.fn(),
+        isOrphaned: vi.fn().mockResolvedValue(false),
+      }
+
+      const serviceWithRepo = new VideoClipService(mockRepository)
+      await expect(serviceWithRepo.hardDeleteClip(clipId)).rejects.toThrow(ClipInUseError)
+    })
+  })
+
+  describe('purgeOrphanedDeletedClips', () => {
+    it('参照されていないソフトデリート済みクリップを一括削除できる', async () => {
+      const deletedClips = [
+        VideoClip.reconstruct({
+          id: VideoClipId.fromString('orphan-1'),
+          name: 'Orphan 1',
+          description: null,
+          videoStandard: VideoStandard.pal(),
+          videoDefinition: VideoDefinition.sd(),
+          startTimecode: Timecode.fromString('00:00:00:00', VideoStandard.pal()),
+          endTimecode: Timecode.fromString('00:00:10:00', VideoStandard.pal()),
+          deletedAt: new Date(),
+        }),
+        VideoClip.reconstruct({
+          id: VideoClipId.fromString('in-use-1'),
+          name: 'In Use 1',
+          description: null,
+          videoStandard: VideoStandard.pal(),
+          videoDefinition: VideoDefinition.sd(),
+          startTimecode: Timecode.fromString('00:00:00:00', VideoStandard.pal()),
+          endTimecode: Timecode.fromString('00:00:10:00', VideoStandard.pal()),
+          deletedAt: new Date(),
+        }),
+      ]
+
+      const mockRepository: VideoClipRepository = {
+        findById: vi.fn(),
+        findByIds: vi.fn(),
+        findAll: vi.fn(),
+        findCompatible: vi.fn(),
+        save: vi.fn(),
+        delete: vi.fn(),
+        exists: vi.fn(),
+        findByIdIncludingDeleted: vi.fn(),
+        findByIdsIncludingDeleted: vi.fn(),
+        findDeleted: vi.fn().mockResolvedValue(deletedClips),
+        restore: vi.fn(),
+        hardDelete: vi.fn().mockResolvedValue(undefined),
+        isOrphaned: vi.fn().mockImplementation((id: VideoClipId) => {
+          return Promise.resolve(id.toString() === 'orphan-1')
+        }),
+      }
+
+      const serviceWithRepo = new VideoClipService(mockRepository)
+      const purgedCount = await serviceWithRepo.purgeOrphanedDeletedClips()
+
+      expect(purgedCount).toBe(1)
+      expect(mockRepository.hardDelete).toHaveBeenCalledTimes(1)
     })
   })
 })

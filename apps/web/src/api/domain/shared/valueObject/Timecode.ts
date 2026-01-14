@@ -1,7 +1,4 @@
-import {
-  InvalidTimecodeError,
-  NegativeTimecodeError,
-} from '../error/DomainError'
+import { InvalidTimecodeError, NegativeTimecodeError } from '../error/DomainError'
 
 import { VideoStandard } from './VideoStandard'
 
@@ -61,10 +58,7 @@ export class Timecode {
     const match = timecodeStr.match(pattern)
 
     if (!match) {
-      throw new InvalidTimecodeError(
-        timecodeStr,
-        'フォーマットは HH:MM:ss:ff である必要があります'
-      )
+      throw new InvalidTimecodeError(timecodeStr, 'フォーマットは HH:MM:ss:ff である必要があります')
     }
 
     const hours = parseInt(match[1], 10)
@@ -72,11 +66,7 @@ export class Timecode {
     const seconds = parseInt(match[3], 10)
     const frames = parseInt(match[4], 10)
 
-    Timecode.validateComponents(
-      { hours, minutes, seconds, frames },
-      standard,
-      timecodeStr
-    )
+    Timecode.validateComponents({ hours, minutes, seconds, frames }, standard, timecodeStr)
 
     return new Timecode(hours, minutes, seconds, frames, standard)
   }
@@ -184,12 +174,7 @@ export class Timecode {
    */
   get totalFrames(): number {
     const fps = this._standard.fps
-    return (
-      this._hours * 3600 * fps +
-      this._minutes * 60 * fps +
-      this._seconds * fps +
-      this._frames
-    )
+    return this._hours * 3600 * fps + this._minutes * 60 * fps + this._seconds * fps + this._frames
   }
 
   /**
@@ -215,10 +200,7 @@ export class Timecode {
       ? other
       : other.convertTo(this._standard)
 
-    return Timecode.fromFrames(
-      this.totalFrames + normalizedOther.totalFrames,
-      this._standard
-    )
+    return Timecode.fromFrames(this.totalFrames + normalizedOther.totalFrames, this._standard)
   }
 
   /**

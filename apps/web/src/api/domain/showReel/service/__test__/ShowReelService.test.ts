@@ -23,11 +23,7 @@ describe('ShowReelService', () => {
       endTimecode: Timecode.fromString(endTimecode, standard),
     })
 
-  const createShowReel = (
-    name: string,
-    standard: VideoStandard,
-    definition: VideoDefinition
-  ) =>
+  const createShowReel = (name: string, standard: VideoStandard, definition: VideoDefinition) =>
     ShowReel.create({
       name,
       videoStandard: standard,

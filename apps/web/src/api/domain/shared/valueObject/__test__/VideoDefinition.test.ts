@@ -39,12 +39,8 @@ describe('VideoDefinition', () => {
     })
 
     it('無効な値はエラーになる', () => {
-      expect(() => VideoDefinition.fromString('4K')).toThrow(
-        InvalidVideoDefinitionError
-      )
-      expect(() => VideoDefinition.fromString('')).toThrow(
-        InvalidVideoDefinitionError
-      )
+      expect(() => VideoDefinition.fromString('4K')).toThrow(InvalidVideoDefinitionError)
+      expect(() => VideoDefinition.fromString('')).toThrow(InvalidVideoDefinitionError)
     })
   })
 

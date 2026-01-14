@@ -109,7 +109,7 @@ describe('ShowReel', () => {
       expect(showReel.clips[0].equals(clip)).toBe(true)
     })
 
-    it('同じクリップを2回追加しても1つのみ', () => {
+    it('同じクリップを複数回追加できる', () => {
       const showReel = ShowReel.create({
         name: 'Test Reel',
         videoStandard: VideoStandard.pal(),
@@ -120,7 +120,9 @@ describe('ShowReel', () => {
       showReel.addClip(clip)
       showReel.addClip(clip)
 
-      expect(showReel.clipCount).toBe(1)
+      expect(showReel.clipCount).toBe(2)
+      expect(showReel.clips[0].equals(clip)).toBe(true)
+      expect(showReel.clips[1].equals(clip)).toBe(true)
     })
 
     it('異なるVideoStandardのクリップは追加できない', () => {
@@ -168,9 +170,9 @@ describe('ShowReel', () => {
         videoDefinition: VideoDefinition.sd(),
       })
 
-      expect(() =>
-        showReel.removeClip(VideoClipId.fromString('non-existent'))
-      ).toThrow(ClipNotFoundError)
+      expect(() => showReel.removeClip(VideoClipId.fromString('non-existent'))).toThrow(
+        ClipNotFoundError
+      )
     })
   })
 

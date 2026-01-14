@@ -39,12 +39,8 @@ describe('VideoStandard', () => {
     })
 
     it('無効な値はエラーになる', () => {
-      expect(() => VideoStandard.fromString('SECAM')).toThrow(
-        InvalidVideoStandardError
-      )
-      expect(() => VideoStandard.fromString('')).toThrow(
-        InvalidVideoStandardError
-      )
+      expect(() => VideoStandard.fromString('SECAM')).toThrow(InvalidVideoStandardError)
+      expect(() => VideoStandard.fromString('')).toThrow(InvalidVideoStandardError)
     })
   })
 

@@ -182,15 +182,11 @@ export class ShowReel {
 
   /**
    * クリップを追加
+   * 同じクリップを複数回追加可能
    * @throws IncompatibleClipError 互換性がない場合
    */
   addClip(clip: VideoClip): void {
     this.validateClipCompatibility(clip)
-
-    if (this.hasClip(clip.id)) {
-      return
-    }
-
     this._clips.push(clip)
     this._updatedAt = new Date()
   }
@@ -248,10 +244,7 @@ export class ShowReel {
    * クリップが追加可能か確認
    */
   canAddClip(clip: VideoClip): boolean {
-    return clip.isCompatibleWithStandardAndDefinition(
-      this._videoStandard,
-      this._videoDefinition
-    )
+    return clip.isCompatibleWithStandardAndDefinition(this._videoStandard, this._videoDefinition)
   }
 
   /**

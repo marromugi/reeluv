@@ -1,7 +1,4 @@
-import {
-  EmptyNameError,
-  InvalidTimecodeRangeError,
-} from '../../shared/error/DomainError'
+import { EmptyNameError, InvalidTimecodeRangeError } from '../../shared/error/DomainError'
 import { Timecode } from '../../shared/valueObject/Timecode'
 import { VideoDefinition } from '../../shared/valueObject/VideoDefinition'
 import { VideoStandard } from '../../shared/valueObject/VideoStandard'
@@ -31,6 +28,7 @@ export interface ReconstructVideoClipParams {
   videoDefinition: VideoDefinition
   startTimecode: Timecode
   endTimecode: Timecode
+  deletedAt: Date | null
 }
 
 /**
@@ -49,7 +47,8 @@ export class VideoClip {
     private readonly _videoStandard: VideoStandard,
     private readonly _videoDefinition: VideoDefinition,
     private readonly _startTimecode: Timecode,
-    private readonly _endTimecode: Timecode
+    private readonly _endTimecode: Timecode,
+    private readonly _deletedAt: Date | null
   ) {}
 
   /**
@@ -68,7 +67,8 @@ export class VideoClip {
       params.videoStandard,
       params.videoDefinition,
       params.startTimecode,
-      params.endTimecode
+      params.endTimecode,
+      null // 新規作成時は未削除
     )
   }
 
@@ -83,7 +83,8 @@ export class VideoClip {
       params.videoStandard,
       params.videoDefinition,
       params.startTimecode,
-      params.endTimecode
+      params.endTimecode,
+      params.deletedAt
     )
   }
 
@@ -93,10 +94,7 @@ export class VideoClip {
     }
   }
 
-  private static validateTimecodeRange(
-    start: Timecode,
-    end: Timecode
-  ): void {
+  private static validateTimecodeRange(start: Timecode, end: Timecode): void {
     if (!end.isGreaterThan(start)) {
       throw new InvalidTimecodeRangeError()
     }
@@ -159,16 +157,27 @@ export class VideoClip {
   }
 
   /**
+   * 削除済みかどうかを判定
+   */
+  get isDeleted(): boolean {
+    return this._deletedAt !== null
+  }
+
+  /**
+   * 削除日時を取得
+   */
+  get deletedAt(): Date | null {
+    return this._deletedAt
+  }
+
+  /**
    * 指定された規格と解像度と互換性があるか判定
    */
   isCompatibleWithStandardAndDefinition(
     standard: VideoStandard,
     definition: VideoDefinition
   ): boolean {
-    return (
-      this._videoStandard.equals(standard) &&
-      this._videoDefinition.equals(definition)
-    )
+    return this._videoStandard.equals(standard) && this._videoDefinition.equals(definition)
   }
 
   /**

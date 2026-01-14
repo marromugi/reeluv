@@ -91,9 +91,7 @@ export class MixedVideoStandardError extends DomainError {
   readonly code = 'MIXED_VIDEO_STANDARD'
 
   constructor() {
-    super(
-      '異なるビデオ規格のタイムコード間で演算を行う場合は、明示的な変換が必要です'
-    )
+    super('異なるビデオ規格のタイムコード間で演算を行う場合は、明示的な変換が必要です')
   }
 }
 
@@ -127,5 +125,40 @@ export class NegativeTimecodeError extends DomainError {
 
   constructor() {
     super('タイムコードは負の値にできません')
+  }
+}
+
+/**
+ * クリップが参照されているため物理削除できないエラー
+ */
+export class ClipInUseError extends DomainError {
+  readonly code = 'CLIP_IN_USE'
+
+  constructor(clipId: string) {
+    super(`クリップ (ID: ${clipId}) はショーリールから参照されているため物理削除できません`)
+  }
+}
+
+/**
+ * 既に削除済みのクリップエラー
+ */
+export class ClipAlreadyDeletedError extends DomainError {
+  readonly code = 'CLIP_ALREADY_DELETED'
+
+  constructor(clipId: string) {
+    super(`クリップ (ID: ${clipId}) は既に削除されています`)
+  }
+}
+
+/**
+ * クリップがソフトデリートされていないエラー
+ */
+export class ClipNotSoftDeletedError extends DomainError {
+  readonly code = 'CLIP_NOT_SOFT_DELETED'
+
+  constructor(clipId: string) {
+    super(
+      `クリップ (ID: ${clipId}) はソフトデリートされていません。物理削除の前にソフトデリートが必要です`
+    )
   }
 }

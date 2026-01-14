@@ -17,3 +17,8 @@ dist
 *.swp
 *.swo
 .DS_Store
+
+# Test
+*.db
+*.db-shm
+*.db-wal

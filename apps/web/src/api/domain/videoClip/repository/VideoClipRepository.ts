@@ -34,10 +34,7 @@ export interface VideoClipRepository {
    * @param definition ビデオ解像度
    * @returns 互換性のあるVideoClipの配列
    */
-  findCompatible(
-    standard: VideoStandard,
-    definition: VideoDefinition
-  ): Promise<VideoClip[]>
+  findCompatible(standard: VideoStandard, definition: VideoDefinition): Promise<VideoClip[]>
 
   /**
    * VideoClipを保存（新規作成・更新）
@@ -46,15 +43,54 @@ export interface VideoClipRepository {
   save(videoClip: VideoClip): Promise<void>
 
   /**
-   * VideoClipを削除
+   * VideoClipをソフトデリート（論理削除）
    * @param id 削除するVideoClipのID
    */
   delete(id: VideoClipId): Promise<void>
 
   /**
-   * IDの存在確認
+   * IDの存在確認（ソフトデリート済みは除外）
    * @param id VideoClipのID
    * @returns 存在すればtrue
    */
   exists(id: VideoClipId): Promise<boolean>
+
+  /**
+   * IDでVideoClipを取得（ソフトデリート済みを含む）
+   * @param id VideoClipのID
+   * @returns VideoClip または存在しない場合はnull
+   */
+  findByIdIncludingDeleted(id: VideoClipId): Promise<VideoClip | null>
+
+  /**
+   * 複数のIDでVideoClipを一括取得（ソフトデリート済みを含む）
+   * @param ids VideoClipのID配列
+   * @returns 見つかったVideoClipの配列
+   */
+  findByIdsIncludingDeleted(ids: VideoClipId[]): Promise<VideoClip[]>
+
+  /**
+   * ソフトデリート済みのVideoClipのみを取得
+   * @returns ソフトデリート済みVideoClipの配列
+   */
+  findDeleted(): Promise<VideoClip[]>
+
+  /**
+   * ソフトデリート済みのVideoClipを復元
+   * @param id 復元するVideoClipのID
+   */
+  restore(id: VideoClipId): Promise<void>
+
+  /**
+   * VideoClipを物理削除
+   * @param id 削除するVideoClipのID
+   */
+  hardDelete(id: VideoClipId): Promise<void>
+
+  /**
+   * VideoClipがどのShowReelからも参照されていないか確認
+   * @param id VideoClipのID
+   * @returns 参照されていなければtrue
+   */
+  isOrphaned(id: VideoClipId): Promise<boolean>
 }

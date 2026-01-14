@@ -48,9 +48,7 @@ export class ShowReelService {
     }
 
     const firstStandard = showReels[0].videoStandard
-    const hasMixedStandards = showReels.some(
-      (reel) => !reel.videoStandard.equals(firstStandard)
-    )
+    const hasMixedStandards = showReels.some((reel) => !reel.videoStandard.equals(firstStandard))
 
     if (hasMixedStandards) {
       throw new MixedVideoStandardError()
@@ -68,10 +66,7 @@ export class ShowReelService {
    * @param showReel ShowReel
    * @returns 検証結果
    */
-  validateClipCompatibility(
-    clip: VideoClip,
-    showReel: ShowReel
-  ): ValidationResult {
+  validateClipCompatibility(clip: VideoClip, showReel: ShowReel): ValidationResult {
     const errors: ValidationError[] = []
 
     if (!clip.videoStandard.equals(showReel.videoStandard)) {
@@ -102,10 +97,7 @@ export class ShowReelService {
    * @param showReel ShowReel
    * @returns 各クリップの検証結果
    */
-  validateClipsCompatibility(
-    clips: VideoClip[],
-    showReel: ShowReel
-  ): ValidationResult[] {
+  validateClipsCompatibility(clips: VideoClip[], showReel: ShowReel): ValidationResult[] {
     return clips.map((clip) => this.validateClipCompatibility(clip, showReel))
   }
 

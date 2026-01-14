@@ -1,7 +1,4 @@
-import {
-  InvalidTimecodeError,
-  NegativeTimecodeError,
-} from '../../error/DomainError'
+import { InvalidTimecodeError, NegativeTimecodeError } from '../../error/DomainError'
 import { Timecode } from '../Timecode'
 import { VideoStandard } from '../VideoStandard'
 
@@ -30,9 +27,9 @@ describe('Timecode', () => {
     })
 
     it('PALで25以上のフレームはエラーになる', () => {
-      expect(() =>
-        Timecode.fromString('00:00:00:25', VideoStandard.pal())
-      ).toThrow(InvalidTimecodeError)
+      expect(() => Timecode.fromString('00:00:00:25', VideoStandard.pal())).toThrow(
+        InvalidTimecodeError
+      )
     })
 
     it('NTSCで29フレームまで有効', () => {
@@ -41,33 +38,33 @@ describe('Timecode', () => {
     })
 
     it('NTSCで30以上のフレームはエラーになる', () => {
-      expect(() =>
-        Timecode.fromString('00:00:00:30', VideoStandard.ntsc())
-      ).toThrow(InvalidTimecodeError)
+      expect(() => Timecode.fromString('00:00:00:30', VideoStandard.ntsc())).toThrow(
+        InvalidTimecodeError
+      )
     })
 
     it('無効なフォーマットはエラーになる', () => {
-      expect(() =>
-        Timecode.fromString('1:30:45:12', VideoStandard.pal())
-      ).toThrow(InvalidTimecodeError)
-      expect(() =>
-        Timecode.fromString('01:30:45', VideoStandard.pal())
-      ).toThrow(InvalidTimecodeError)
+      expect(() => Timecode.fromString('1:30:45:12', VideoStandard.pal())).toThrow(
+        InvalidTimecodeError
+      )
+      expect(() => Timecode.fromString('01:30:45', VideoStandard.pal())).toThrow(
+        InvalidTimecodeError
+      )
       expect(() => Timecode.fromString('invalid', VideoStandard.pal())).toThrow(
         InvalidTimecodeError
       )
     })
 
     it('範囲外の分はエラーになる', () => {
-      expect(() =>
-        Timecode.fromString('00:60:00:00', VideoStandard.pal())
-      ).toThrow(InvalidTimecodeError)
+      expect(() => Timecode.fromString('00:60:00:00', VideoStandard.pal())).toThrow(
+        InvalidTimecodeError
+      )
     })
 
     it('範囲外の秒はエラーになる', () => {
-      expect(() =>
-        Timecode.fromString('00:00:60:00', VideoStandard.pal())
-      ).toThrow(InvalidTimecodeError)
+      expect(() => Timecode.fromString('00:00:60:00', VideoStandard.pal())).toThrow(
+        InvalidTimecodeError
+      )
     })
   })
 
@@ -85,9 +82,7 @@ describe('Timecode', () => {
     })
 
     it('負のフレーム数はエラーになる', () => {
-      expect(() => Timecode.fromFrames(-1, VideoStandard.pal())).toThrow(
-        NegativeTimecodeError
-      )
+      expect(() => Timecode.fromFrames(-1, VideoStandard.pal())).toThrow(NegativeTimecodeError)
     })
   })
 

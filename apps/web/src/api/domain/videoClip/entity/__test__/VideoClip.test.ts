@@ -1,7 +1,4 @@
-import {
-  EmptyNameError,
-  InvalidTimecodeRangeError,
-} from '../../../shared/error/DomainError'
+import { EmptyNameError, InvalidTimecodeRangeError } from '../../../shared/error/DomainError'
 import { Timecode } from '../../../shared/valueObject/Timecode'
 import { VideoDefinition } from '../../../shared/valueObject/VideoDefinition'
 import { VideoStandard } from '../../../shared/valueObject/VideoStandard'
@@ -51,15 +48,11 @@ describe('VideoClip', () => {
     })
 
     it('名前が空だとエラーになる', () => {
-      expect(() =>
-        VideoClip.create({ ...defaultParams, name: '' })
-      ).toThrow(EmptyNameError)
+      expect(() => VideoClip.create({ ...defaultParams, name: '' })).toThrow(EmptyNameError)
     })
 
     it('名前が空白のみだとエラーになる', () => {
-      expect(() =>
-        VideoClip.create({ ...defaultParams, name: '   ' })
-      ).toThrow(EmptyNameError)
+      expect(() => VideoClip.create({ ...defaultParams, name: '   ' })).toThrow(EmptyNameError)
     })
 
     it('終了タイムコードが開始以前だとエラーになる', () => {
@@ -95,10 +88,50 @@ describe('VideoClip', () => {
         videoDefinition: VideoDefinition.hd(),
         startTimecode: Timecode.fromString('00:00:00:00', VideoStandard.ntsc()),
         endTimecode: Timecode.fromString('00:00:15:27', VideoStandard.ntsc()),
+        deletedAt: null,
       })
 
       expect(clip.id.equals(id)).toBe(true)
       expect(clip.name).toBe('Reconstructed Clip')
+    })
+
+    it('削除済みのクリップを再構築できる', () => {
+      const id = VideoClipId.fromString('deleted-id')
+      const deletedAt = new Date('2024-01-01T00:00:00Z')
+      const clip = VideoClip.reconstruct({
+        id,
+        name: 'Deleted Clip',
+        description: null,
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+        startTimecode: Timecode.fromString('00:00:00:00', VideoStandard.pal()),
+        endTimecode: Timecode.fromString('00:00:10:00', VideoStandard.pal()),
+        deletedAt,
+      })
+
+      expect(clip.isDeleted).toBe(true)
+      expect(clip.deletedAt).toEqual(deletedAt)
+    })
+  })
+
+  describe('isDeleted', () => {
+    it('deletedAtがnullの場合falseを返す', () => {
+      const clip = VideoClip.create(defaultParams)
+      expect(clip.isDeleted).toBe(false)
+    })
+
+    it('deletedAtが設定されている場合trueを返す', () => {
+      const clip = VideoClip.reconstruct({
+        id: VideoClipId.fromString('test-id'),
+        name: 'Test Clip',
+        description: null,
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+        startTimecode: Timecode.fromString('00:00:00:00', VideoStandard.pal()),
+        endTimecode: Timecode.fromString('00:00:10:00', VideoStandard.pal()),
+        deletedAt: new Date(),
+      })
+      expect(clip.isDeleted).toBe(true)
     })
   })
 
@@ -129,10 +162,7 @@ describe('VideoClip', () => {
       const clip = VideoClip.create(defaultParams)
 
       expect(
-        clip.isCompatibleWithStandardAndDefinition(
-          VideoStandard.pal(),
-          VideoDefinition.sd()
-        )
+        clip.isCompatibleWithStandardAndDefinition(VideoStandard.pal(), VideoDefinition.sd())
       ).toBe(true)
     })
 
@@ -140,10 +170,7 @@ describe('VideoClip', () => {
       const clip = VideoClip.create(defaultParams)
 
       expect(
-        clip.isCompatibleWithStandardAndDefinition(
-          VideoStandard.ntsc(),
-          VideoDefinition.sd()
-        )
+        clip.isCompatibleWithStandardAndDefinition(VideoStandard.ntsc(), VideoDefinition.sd())
       ).toBe(false)
     })
 
@@ -151,10 +178,7 @@ describe('VideoClip', () => {
       const clip = VideoClip.create(defaultParams)
 
       expect(
-        clip.isCompatibleWithStandardAndDefinition(
-          VideoStandard.pal(),
-          VideoDefinition.hd()
-        )
+        clip.isCompatibleWithStandardAndDefinition(VideoStandard.pal(), VideoDefinition.hd())
       ).toBe(false)
     })
 
@@ -162,10 +186,7 @@ describe('VideoClip', () => {
       const clip = VideoClip.create(defaultParams)
 
       expect(
-        clip.isCompatibleWithStandardAndDefinition(
-          VideoStandard.ntsc(),
-          VideoDefinition.hd()
-        )
+        clip.isCompatibleWithStandardAndDefinition(VideoStandard.ntsc(), VideoDefinition.hd())
       ).toBe(false)
     })
   })
@@ -201,7 +222,7 @@ describe('VideoClip', () => {
       expect(clip.duration.toString()).toBe('00:00:30:12')
     })
 
-    it('Clip 2 (M&M\'s) を作成できる', () => {
+    it("Clip 2 (M&M's) を作成できる", () => {
       const clip = VideoClip.create({
         name: "M&M's",
         description: 'At a party, a brown shelled M&M is mistaken for being naked.',

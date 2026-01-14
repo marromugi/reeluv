@@ -54,9 +54,7 @@ export class VideoStandard {
    * フレームレート（fps）を取得
    */
   get fps(): number {
-    return this.value === 'PAL'
-      ? VideoStandard.PAL_FPS
-      : VideoStandard.NTSC_FPS
+    return this.value === 'PAL' ? VideoStandard.PAL_FPS : VideoStandard.NTSC_FPS
   }
 
   /**

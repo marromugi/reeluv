@@ -17,6 +17,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "drizzle-orm": "^0.45.1"
+  },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@vitest/coverage-v8": "^4.0.17",
@@ -40,5 +43,10 @@
   },
   "volta": {
     "node": "22.18.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }
