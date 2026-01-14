@@ -25,7 +25,6 @@ export const getSvgoConfig = (): Config => ({
     },
     {
       name: 'removeViewBox',
-      active: false,
     },
   ],
 })
