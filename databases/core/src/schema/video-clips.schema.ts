@@ -33,9 +33,12 @@ export const videoClips = sqliteTable(
     updatedAt: integer('updated_at', { mode: 'timestamp' })
       .notNull()
       .default(sql`(unixepoch())`),
+    /** ソフトデリート用。NULLの場合は未削除 */
+    deletedAt: integer('deleted_at', { mode: 'timestamp' }),
   },
   (table) => [
     index('video_clips_standard_definition_idx').on(table.videoStandard, table.videoDefinition),
+    index('video_clips_deleted_at_idx').on(table.deletedAt),
   ]
 )
 

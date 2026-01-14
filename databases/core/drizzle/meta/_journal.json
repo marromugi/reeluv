@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1768355516371,
+      "tag": "0000_jittery_lionheart",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1768360028753,
+      "tag": "0001_strong_baron_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1768360380689,
+      "tag": "0002_tearful_lord_tyger",
+      "breakpoints": true
+    }
+  ]
+}

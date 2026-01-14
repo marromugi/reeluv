@@ -7,6 +7,7 @@ import { videoClips } from './video-clips.schema'
 /**
  * Show Reel と Video Clip の中間テーブル
  * ショーリール内のクリップの順序も管理
+ * 同じクリップを複数回追加可能（主キーは showReelId + position）
  */
 export const showReelClips = sqliteTable(
   'show_reel_clips',
@@ -16,14 +17,14 @@ export const showReelClips = sqliteTable(
       .references(() => showReels.id, { onDelete: 'cascade' }),
     videoClipId: text('video_clip_id')
       .notNull()
-      .references(() => videoClips.id, { onDelete: 'cascade' }),
+      .references(() => videoClips.id, { onDelete: 'no action' }),
     position: integer('position').notNull(), // クリップの表示順序
     createdAt: integer('created_at', { mode: 'timestamp' })
       .notNull()
       .default(sql`(unixepoch())`),
   },
   (table) => [
-    primaryKey({ columns: [table.showReelId, table.videoClipId] }),
+    primaryKey({ columns: [table.showReelId, table.position] }),
     index('show_reel_clips_show_reel_id_idx').on(table.showReelId),
     index('show_reel_clips_video_clip_id_idx').on(table.videoClipId),
   ]
