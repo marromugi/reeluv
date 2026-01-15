@@ -1,10 +1,10 @@
 import { createRoute } from '@hono/zod-openapi'
 
 import {
-  ClipIdParamSchema,
-  ClipOperationResponseSchema,
+  RemoveClipOperationResponseSchema,
+  RemoveClipRequestSchema,
   ShowReelIdParamSchema,
-} from '../../../schema'
+} from '../../schema'
 
 import { RemoveClipFromShowReelUseCase } from '@/api/application/showReel/RemoveClipFromShowReelUseCase'
 import { DrizzleShowReelRepository } from '@/api/infrastructure/repository/showReel/DrizzleShowReelRepository'
@@ -12,27 +12,29 @@ import type { AppContext } from '@/api/route'
 import { BadRequestErrorSchema, NotFoundErrorSchema } from '@/api/route/_shared/schema/error'
 
 /**
- * パスパラメータスキーマ（ShowReelID + ClipID）
- */
-const RemoveClipParamsSchema = ShowReelIdParamSchema.merge(ClipIdParamSchema)
-
-/**
- * DELETE /api/reels/:id/clips/:clipId ルート定義
+ * DELETE /api/reels/:id/clips ルート定義
  */
 export const removeClipRoute = createRoute({
   method: 'delete',
-  path: '/reels/{id}/clips/{clipId}',
+  path: '/reels/{id}/clips',
   tags: ['Reel'],
   summary: 'ShowReelからクリップを削除',
-  description: '指定されたShowReelからVideoClipを削除します。',
+  description: '指定されたShowReelからVideoClipをインデックス指定で削除します。',
   request: {
-    params: RemoveClipParamsSchema,
+    params: ShowReelIdParamSchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: RemoveClipRequestSchema,
+        },
+      },
+    },
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: ClipOperationResponseSchema,
+          schema: RemoveClipOperationResponseSchema,
         },
       },
       description: 'クリップ削除結果',
@@ -43,7 +45,7 @@ export const removeClipRoute = createRoute({
           schema: BadRequestErrorSchema,
         },
       },
-      description: 'クリップがShowReelに含まれていません',
+      description: 'インデックスが範囲外です',
     },
     404: {
       content: {
@@ -57,17 +59,18 @@ export const removeClipRoute = createRoute({
 })
 
 /**
- * DELETE /api/reels/:id/clips/:clipId ハンドラーを登録
+ * DELETE /api/reels/:id/clips ハンドラーを登録
  */
 export function registerRemoveClip(app: AppContext): void {
   app.openapi(removeClipRoute, async (c) => {
-    const { id: showReelId, clipId } = c.req.valid('param')
+    const { id: showReelId } = c.req.valid('param')
+    const { index: clipIndex } = c.req.valid('json')
     const db = c.get('db')
 
     const repository = new DrizzleShowReelRepository(db)
     const useCase = new RemoveClipFromShowReelUseCase(repository)
 
-    const result = await useCase.execute({ showReelId, clipId })
+    const result = await useCase.execute({ showReelId, clipIndex })
 
     return c.json(
       {

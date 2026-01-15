@@ -1,4 +1,5 @@
 import {
+  ClipIndexOutOfBoundsError,
   ClipNotFoundError,
   EmptyNameError,
   IncompatibleClipError,
@@ -173,6 +174,79 @@ describe('ShowReel', () => {
       expect(() => showReel.removeClip(VideoClipId.fromString('non-existent'))).toThrow(
         ClipNotFoundError
       )
+    })
+  })
+
+  describe('removeClipAt', () => {
+    it('指定インデックスのクリップを削除できる', () => {
+      const showReel = ShowReel.create({
+        name: 'Test Reel',
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+      })
+      const clip1 = createPalSdClip('Clip 1', '00:00:10:00')
+      const clip2 = createPalSdClip('Clip 2', '00:00:20:00')
+      const clip3 = createPalSdClip('Clip 3', '00:00:30:00')
+      showReel.addClip(clip1)
+      showReel.addClip(clip2)
+      showReel.addClip(clip3)
+
+      showReel.removeClipAt(1)
+
+      expect(showReel.clipCount).toBe(2)
+      expect(showReel.clips[0].equals(clip1)).toBe(true)
+      expect(showReel.clips[1].equals(clip3)).toBe(true)
+    })
+
+    it('同じクリップが複数ある場合、指定インデックスのみ削除される', () => {
+      const showReel = ShowReel.create({
+        name: 'Test Reel',
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+      })
+      const clip = createPalSdClip('Clip', '00:00:10:00')
+      showReel.addClip(clip)
+      showReel.addClip(clip)
+      showReel.addClip(clip)
+
+      showReel.removeClipAt(1)
+
+      expect(showReel.clipCount).toBe(2)
+    })
+
+    it('範囲外のインデックスはエラーになる', () => {
+      const showReel = ShowReel.create({
+        name: 'Test Reel',
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+      })
+      const clip = createPalSdClip('Clip', '00:00:30:00')
+      showReel.addClip(clip)
+
+      expect(() => showReel.removeClipAt(1)).toThrow(ClipIndexOutOfBoundsError)
+      expect(() => showReel.removeClipAt(100)).toThrow(ClipIndexOutOfBoundsError)
+    })
+
+    it('負のインデックスはエラーになる', () => {
+      const showReel = ShowReel.create({
+        name: 'Test Reel',
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+      })
+      const clip = createPalSdClip('Clip', '00:00:30:00')
+      showReel.addClip(clip)
+
+      expect(() => showReel.removeClipAt(-1)).toThrow(ClipIndexOutOfBoundsError)
+    })
+
+    it('空のShowReelで削除しようとするとエラーになる', () => {
+      const showReel = ShowReel.create({
+        name: 'Test Reel',
+        videoStandard: VideoStandard.pal(),
+        videoDefinition: VideoDefinition.sd(),
+      })
+
+      expect(() => showReel.removeClipAt(0)).toThrow(ClipIndexOutOfBoundsError)
     })
   })
 

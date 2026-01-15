@@ -1,4 +1,5 @@
 import {
+  ClipIndexOutOfBoundsError,
   ClipNotFoundError,
   EmptyNameError,
   IncompatibleClipError,
@@ -192,7 +193,7 @@ export class ShowReel {
   }
 
   /**
-   * クリップを削除
+   * クリップを削除（ID指定）
    * @throws ClipNotFoundError クリップが存在しない場合
    */
   removeClip(clipId: VideoClipId): void {
@@ -200,6 +201,19 @@ export class ShowReel {
 
     if (index === -1) {
       throw new ClipNotFoundError(clipId.toString())
+    }
+
+    this._clips.splice(index, 1)
+    this._updatedAt = new Date()
+  }
+
+  /**
+   * 指定インデックスのクリップを削除
+   * @throws ClipIndexOutOfBoundsError インデックスが範囲外の場合
+   */
+  removeClipAt(index: number): void {
+    if (index < 0 || index >= this._clips.length) {
+      throw new ClipIndexOutOfBoundsError(index, this._clips.length)
     }
 
     this._clips.splice(index, 1)

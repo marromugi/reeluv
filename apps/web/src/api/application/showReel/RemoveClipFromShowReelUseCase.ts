@@ -1,6 +1,5 @@
 import type { ShowReelRepository } from '../../domain/showReel/repository/ShowReelRepository'
 import { ShowReelId } from '../../domain/showReel/valueObject/ShowReelId'
-import { VideoClipId } from '../../domain/videoClip/valueObject/VideoClipId'
 import { NotFoundError } from '../shared/error/ApplicationError'
 
 /**
@@ -8,7 +7,7 @@ import { NotFoundError } from '../shared/error/ApplicationError'
  */
 export interface RemoveClipFromShowReelInput {
   showReelId: string
-  clipId: string
+  clipIndex: number
 }
 
 /**
@@ -16,7 +15,7 @@ export interface RemoveClipFromShowReelInput {
  */
 export interface RemoveClipFromShowReelOutput {
   showReelId: string
-  clipId: string
+  clipIndex: number
   clipCount: number
   totalDuration: string
   updatedAt: Date
@@ -31,7 +30,7 @@ export class RemoveClipFromShowReelUseCase {
   /**
    * ShowReelからクリップを削除する
    * @throws NotFoundError ShowReelが存在しない場合
-   * @throws ClipNotFoundError クリップがShowReelに含まれていない場合
+   * @throws ClipIndexOutOfBoundsError インデックスが範囲外の場合
    */
   async execute(input: RemoveClipFromShowReelInput): Promise<RemoveClipFromShowReelOutput> {
     // ShowReelを取得
@@ -42,16 +41,15 @@ export class RemoveClipFromShowReelUseCase {
       throw new NotFoundError('ShowReel', input.showReelId)
     }
 
-    // ドメインロジックでクリップを削除
-    const clipId = VideoClipId.fromString(input.clipId)
-    showReel.removeClip(clipId)
+    // ドメインロジックでクリップを削除（インデックス指定）
+    showReel.removeClipAt(input.clipIndex)
 
     // 保存
     await this.showReelRepository.save(showReel)
 
     return {
       showReelId: showReel.id.toString(),
-      clipId: input.clipId,
+      clipIndex: input.clipIndex,
       clipCount: showReel.clipCount,
       totalDuration: showReel.totalDuration.toString(),
       updatedAt: showReel.updatedAt,

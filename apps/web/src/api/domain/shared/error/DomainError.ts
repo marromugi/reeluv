@@ -162,3 +162,14 @@ export class ClipNotSoftDeletedError extends DomainError {
     )
   }
 }
+
+/**
+ * クリップインデックスが範囲外エラー
+ */
+export class ClipIndexOutOfBoundsError extends DomainError {
+  readonly code = 'CLIP_INDEX_OUT_OF_BOUNDS'
+
+  constructor(index: number, clipCount: number) {
+    super(`クリップインデックス ${index} は範囲外です (クリップ数: ${clipCount})`)
+  }
+}

@@ -11,7 +11,13 @@ const config = [
   ...rootConfig,
   ...nextVitals,
   ...nextTs,
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'src/client/api/**', // orval自動生成ファイル
+  ]),
   ...storybook.configs['flat/recommended'],
 ]
 

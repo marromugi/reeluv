@@ -47,6 +47,15 @@ apps/web/src/components/ui/{ComponentName}/
 - **Storybook**: `@storybook/nextjs-vite`, `storybook/test`
 - **テスト**: `vitest`, `vitest-browser-react`, `composeStories`
 
+## Props
+
+コンポーネントに柔軟性を持たせるために、そのコンポーネントの機能を破綻させない範囲で`ComponentProps`を利用を検討してください。
+`ComponentProps`を適用したことによる混乱や機能不全が予期される場合は、Omitを用いてそのプロパティを除外するか、利用を控えてください。
+
+```tsx
+export type TypographyProps<T> = ComponentProps<T> & VaraintProps<typeof typographyVariants>
+```
+
 ## アニメーション
 
 `motion/react` を使用してアニメーションを実装：

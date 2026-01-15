@@ -18,13 +18,13 @@ import type {
 } from 'swr/mutation';
 
 import type {
+  AddClipOperationResponse,
   AddClipRequest,
-  ClipOperationResponse,
   CompatibleClipsResponse,
   CreateShowReelRequest,
   CreateShowReelResponse,
-  DeleteApiReelsIdClipsClipId400,
-  DeleteApiReelsIdClipsClipId404,
+  DeleteApiReelsIdClips400,
+  DeleteApiReelsIdClips404,
   DeleteShowReelResponse,
   GetApiReelsId404,
   GetApiReelsIdCompatibleClips404,
@@ -33,6 +33,12 @@ import type {
   PostApiReels400,
   PostApiReelsIdClips400,
   PostApiReelsIdClips404,
+  PutApiReelsIdClipsReorder400,
+  PutApiReelsIdClipsReorder404,
+  RemoveClipOperationResponse,
+  RemoveClipRequest,
+  ReorderClipsRequest,
+  ReorderClipsResponse,
   ShowReelDetailResponse,
   ShowReelListResponse,
   UpdateShowReelNameRequest,
@@ -270,7 +276,7 @@ export const postApiReelsIdClips = (
     id: string,
     addClipRequest: AddClipRequest,
  options?: SecondParameter<typeof customFetcher>) => {
-    return customFetcher<ClipOperationResponse>(
+    return customFetcher<AddClipOperationResponse>(
     {url: `/api/reels/${id}/clips`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: addClipRequest
@@ -310,45 +316,91 @@ export const usePostApiReelsIdClips = <TError = PostApiReelsIdClips400 | PostApi
   }
 }
 /**
- * 指定されたShowReelからVideoClipを削除します。
+ * 指定されたShowReelからVideoClipをインデックス指定で削除します。
  * @summary ShowReelからクリップを削除
  */
-export const deleteApiReelsIdClipsClipId = (
+export const deleteApiReelsIdClips = (
     id: string,
-    clipId: string,
+    removeClipRequest: RemoveClipRequest,
  options?: SecondParameter<typeof customFetcher>) => {
-    return customFetcher<ClipOperationResponse>(
-    {url: `/api/reels/${id}/clips/${clipId}`, method: 'DELETE'
+    return customFetcher<RemoveClipOperationResponse>(
+    {url: `/api/reels/${id}/clips`, method: 'DELETE',
+      headers: {'Content-Type': 'application/json', },
+      data: removeClipRequest
     },
     options);
   }
 
 
 
-export const getDeleteApiReelsIdClipsClipIdMutationFetcher = (id: string,
-    clipId: string, options?: SecondParameter<typeof customFetcher>) => {
-  return (_: Key, __: { arg: Arguments }) => {
-    return deleteApiReelsIdClipsClipId(id, clipId, options);
+export const getDeleteApiReelsIdClipsMutationFetcher = (id: string, options?: SecondParameter<typeof customFetcher>) => {
+  return (_: Key, { arg }: { arg: RemoveClipRequest }) => {
+    return deleteApiReelsIdClips(id, arg, options);
   }
 }
-export const getDeleteApiReelsIdClipsClipIdMutationKey = (id: string,
-    clipId: string,) => [`/api/reels/${id}/clips/${clipId}`] as const;
+export const getDeleteApiReelsIdClipsMutationKey = (id: string,) => [`/api/reels/${id}/clips`] as const;
 
-export type DeleteApiReelsIdClipsClipIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiReelsIdClipsClipId>>>
-export type DeleteApiReelsIdClipsClipIdMutationError = DeleteApiReelsIdClipsClipId400 | DeleteApiReelsIdClipsClipId404
+export type DeleteApiReelsIdClipsMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiReelsIdClips>>>
+export type DeleteApiReelsIdClipsMutationError = DeleteApiReelsIdClips400 | DeleteApiReelsIdClips404
 
 /**
  * @summary ShowReelからクリップを削除
  */
-export const useDeleteApiReelsIdClipsClipId = <TError = DeleteApiReelsIdClipsClipId400 | DeleteApiReelsIdClipsClipId404>(
-  id: string,
-    clipId: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof deleteApiReelsIdClipsClipId>>, TError, Key, Arguments, Awaited<ReturnType<typeof deleteApiReelsIdClipsClipId>>> & { swrKey?: string }, request?: SecondParameter<typeof customFetcher>}
+export const useDeleteApiReelsIdClips = <TError = DeleteApiReelsIdClips400 | DeleteApiReelsIdClips404>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof deleteApiReelsIdClips>>, TError, Key, RemoveClipRequest, Awaited<ReturnType<typeof deleteApiReelsIdClips>>> & { swrKey?: string }, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
-  const swrKey = swrOptions?.swrKey ?? getDeleteApiReelsIdClipsClipIdMutationKey(id,clipId);
-  const swrFn = getDeleteApiReelsIdClipsClipIdMutationFetcher(id,clipId, requestOptions);
+  const swrKey = swrOptions?.swrKey ?? getDeleteApiReelsIdClipsMutationKey(id);
+  const swrFn = getDeleteApiReelsIdClipsMutationFetcher(id, requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+/**
+ * 指定されたShowReel内のクリップの順序を変更します。
+ * @summary ShowReel内のクリップを並べ替え
+ */
+export const putApiReelsIdClipsReorder = (
+    id: string,
+    reorderClipsRequest: ReorderClipsRequest,
+ options?: SecondParameter<typeof customFetcher>) => {
+    return customFetcher<ReorderClipsResponse>(
+    {url: `/api/reels/${id}/clips/reorder`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: reorderClipsRequest
+    },
+    options);
+  }
+
+
+
+export const getPutApiReelsIdClipsReorderMutationFetcher = (id: string, options?: SecondParameter<typeof customFetcher>) => {
+  return (_: Key, { arg }: { arg: ReorderClipsRequest }) => {
+    return putApiReelsIdClipsReorder(id, arg, options);
+  }
+}
+export const getPutApiReelsIdClipsReorderMutationKey = (id: string,) => [`/api/reels/${id}/clips/reorder`] as const;
+
+export type PutApiReelsIdClipsReorderMutationResult = NonNullable<Awaited<ReturnType<typeof putApiReelsIdClipsReorder>>>
+export type PutApiReelsIdClipsReorderMutationError = PutApiReelsIdClipsReorder400 | PutApiReelsIdClipsReorder404
+
+/**
+ * @summary ShowReel内のクリップを並べ替え
+ */
+export const usePutApiReelsIdClipsReorder = <TError = PutApiReelsIdClipsReorder400 | PutApiReelsIdClipsReorder404>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof putApiReelsIdClipsReorder>>, TError, Key, ReorderClipsRequest, Awaited<ReturnType<typeof putApiReelsIdClipsReorder>>> & { swrKey?: string }, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPutApiReelsIdClipsReorderMutationKey(id);
+  const swrFn = getPutApiReelsIdClipsReorderMutationFetcher(id, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 

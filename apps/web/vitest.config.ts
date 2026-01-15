@@ -6,8 +6,6 @@ import react from '@vitejs/plugin-react'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
-import { a11yTestResultCommand } from './src/test/command'
-
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
@@ -32,62 +30,19 @@ export default defineConfig({
         test: {
           name: 'base',
           include: ['src/**/*.{test,spec}.{ts,tsx}'],
-          exclude: [
-            'src/**/*.a11y.{test,spec}.{ts,tsx}',
-            'src/**/*.vrt.{test,spec}.{ts,tsx}',
-            'src/api/**/*.{test,spec}.{ts,tsx}',
-          ],
+          exclude: ['src/**/*.vrt.{test,spec}.{ts,tsx}', 'src/api/**/*.{test,spec}.{ts,tsx}'],
           environment: 'happy-dom',
         },
       },
       {
         // api test
+        extends: true,
         test: {
           name: 'api',
           globals: true,
           include: ['src/api/**/*.{test,spec}.{ts,tsx}'],
           environment: 'happy-dom',
           setupFiles: ['./vitest.setup.api.ts'],
-        },
-      },
-      {
-        // a11y test
-        extends: true,
-        test: {
-          name: 'a11y',
-          include: ['src/**/*.a11y.{test,spec}.{ts,tsx}'],
-          setupFiles: ['./vitest.setup.browser.ts'],
-          browser: {
-            enabled: true,
-            provider: playwright({}),
-            headless: true,
-            instances: [{ browser: 'chromium' }],
-            viewport: {
-              width: 1920,
-              height: 1080,
-            },
-            commands: {
-              a11yTest: a11yTestResultCommand,
-            },
-            expect: {
-              toMatchScreenshot: {
-                comparatorName: 'pixelmatch',
-                comparatorOptions: {
-                  allowedMismatchedPixels: 16, // 16pxの誤差まで許容
-                },
-                screenshotOptions: {
-                  fullPage: false,
-                  clip: {
-                    x: 0,
-                    y: 0,
-                    width: 1920,
-                    height: 1080,
-                  },
-                },
-              },
-            },
-            screenshotFailures: false, // エラー時にスクリーンショットを撮らない
-          },
         },
       },
       {

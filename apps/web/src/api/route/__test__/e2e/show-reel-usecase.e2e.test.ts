@@ -6,12 +6,12 @@ import { DrizzleVideoClipRepository } from '@/api/infrastructure/repository/vide
 import { createApp, setupOpenAPIDoc } from '@/api/route'
 import { registerGetClips } from '@/api/route/clips/get'
 import { registerCreateClip } from '@/api/route/clips/post'
+import { registerRemoveClip } from '@/api/route/reels/[id]/clips/delete'
+import { registerAddClip } from '@/api/route/reels/[id]/clips/post'
+import { registerGetCompatibleClips } from '@/api/route/reels/[id]/compatible-clips/get'
 import { registerDeleteReel } from '@/api/route/reels/[id]/delete'
 import { registerGetReelById } from '@/api/route/reels/[id]/get'
 import { registerUpdateReelName } from '@/api/route/reels/[id]/patch'
-import { registerAddClip } from '@/api/route/reels/[id]/clips/post'
-import { registerRemoveClip } from '@/api/route/reels/[id]/clips/[clipId]/delete'
-import { registerGetCompatibleClips } from '@/api/route/reels/[id]/compatible-clips/get'
 import { registerGetReels } from '@/api/route/reels/get'
 import { registerCreateReel } from '@/api/route/reels/post'
 import { getTestDB } from '@/test/database'
@@ -33,8 +33,7 @@ describe('ShowReel ユースケースシナリオ E2Eテスト', () => {
     // PAL SD クリップ
     budLight: {
       name: 'Bud Light',
-      description:
-        'A factory is working on the new Bud Light Platinum.',
+      description: 'A factory is working on the new Bud Light Platinum.',
       standard: VideoStandard.pal(),
       definition: VideoDefinition.sd(),
       start: '00:00:00:00',
@@ -52,8 +51,7 @@ describe('ShowReel ユースケースシナリオ E2Eテスト', () => {
     // NTSC SD クリップ
     mms: {
       name: "M&M's",
-      description:
-        'At a party, a brown shelled M&M is mistaken for being naked.',
+      description: 'At a party, a brown shelled M&M is mistaken for being naked.',
       standard: VideoStandard.ntsc(),
       definition: VideoDefinition.sd(),
       start: '00:00:00:00',
@@ -275,14 +273,11 @@ describe('ShowReel ユースケースシナリオ E2Eテスト', () => {
       const audiClip = await createTestClip(TEST_CLIPS_DATA.audi)
 
       // Bud Light を追加
-      const addBudLightRes = await app.request(
-        `/api/reels/${showReelId}/clips`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ clipId: budLightClip.id.toString() }),
-        }
-      )
+      const addBudLightRes = await app.request(`/api/reels/${showReelId}/clips`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clipId: budLightClip.id.toString() }),
+      })
       expect(addBudLightRes.status).toBe(200)
 
       // Audi を追加
@@ -459,11 +454,12 @@ describe('ShowReel ユースケースシナリオ E2Eテスト', () => {
       expect(showReel.totalDuration).toBe('00:00:30:00')
       expect(showReel.clipCount).toBe(1)
 
-      // クリップを削除
-      const removeRes = await app.request(
-        `/api/reels/${showReelId}/clips/${vwClip.id.toString()}`,
-        { method: 'DELETE' }
-      )
+      // クリップを削除（インデックス0を指定）
+      const removeRes = await app.request(`/api/reels/${showReelId}/clips`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index: 0 }),
+      })
       expect(removeRes.status).toBe(200)
 
       // 削除後: 合計時間が 00:00:00:00 に戻る

@@ -6,6 +6,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './addClipOperationResponse';
+export * from './addClipOperationResponseData';
 export * from './addClipRequest';
 export * from './clipOperationResponse';
 export * from './clipOperationResponseData';
@@ -19,6 +21,10 @@ export * from './createVideoClipRequest';
 export * from './createVideoClipRequestVideoDefinition';
 export * from './createVideoClipRequestVideoStandard';
 export * from './createVideoClipResponse';
+export * from './deleteApiReelsIdClips400';
+export * from './deleteApiReelsIdClips400Error';
+export * from './deleteApiReelsIdClips404';
+export * from './deleteApiReelsIdClips404Error';
 export * from './deleteApiReelsIdClipsClipId400';
 export * from './deleteApiReelsIdClipsClipId400Error';
 export * from './deleteApiReelsIdClipsClipId404';
@@ -43,6 +49,16 @@ export * from './postApiReelsIdClips400';
 export * from './postApiReelsIdClips400Error';
 export * from './postApiReelsIdClips404';
 export * from './postApiReelsIdClips404Error';
+export * from './putApiReelsIdClipsReorder400';
+export * from './putApiReelsIdClipsReorder400Error';
+export * from './putApiReelsIdClipsReorder404';
+export * from './putApiReelsIdClipsReorder404Error';
+export * from './removeClipOperationResponse';
+export * from './removeClipOperationResponseData';
+export * from './removeClipRequest';
+export * from './reorderClipsRequest';
+export * from './reorderClipsResponse';
+export * from './reorderClipsResponseData';
 export * from './showReelClip';
 export * from './showReelDetail';
 export * from './showReelDetailResponse';

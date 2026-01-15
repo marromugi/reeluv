@@ -147,9 +147,18 @@ export const AddClipRequestSchema = z
   .openapi('AddClipRequest')
 
 /**
- * クリップ操作レスポンススキーマ
+ * クリップ削除リクエストスキーマ
  */
-export const ClipOperationResponseSchema = z
+export const RemoveClipRequestSchema = z
+  .object({
+    index: z.number().int().min(0).openapi({ example: 0, description: '削除するクリップのインデックス（0始まり）' }),
+  })
+  .openapi('RemoveClipRequest')
+
+/**
+ * クリップ追加操作レスポンススキーマ
+ */
+export const AddClipOperationResponseSchema = z
   .object({
     data: z.object({
       showReelId: z.string().openapi({ example: 'reel-abc123' }),
@@ -159,7 +168,27 @@ export const ClipOperationResponseSchema = z
       updatedAt: z.string().datetime().openapi({ example: '2024-01-01T00:00:00.000Z' }),
     }),
   })
-  .openapi('ClipOperationResponse')
+  .openapi('AddClipOperationResponse')
+
+/**
+ * クリップ操作レスポンススキーマ（後方互換性のため残す）
+ */
+export const ClipOperationResponseSchema = AddClipOperationResponseSchema
+
+/**
+ * クリップ削除操作レスポンススキーマ
+ */
+export const RemoveClipOperationResponseSchema = z
+  .object({
+    data: z.object({
+      showReelId: z.string().openapi({ example: 'reel-abc123' }),
+      clipIndex: z.number().openapi({ example: 0, description: '削除されたクリップのインデックス' }),
+      clipCount: z.number().openapi({ example: 4 }),
+      totalDuration: z.string().openapi({ example: '00:04:30:00' }),
+      updatedAt: z.string().datetime().openapi({ example: '2024-01-01T00:00:00.000Z' }),
+    }),
+  })
+  .openapi('RemoveClipOperationResponse')
 
 /**
  * クリップIDパラメータスキーマ
@@ -185,3 +214,27 @@ export const CompatibleClipsResponseSchema = z
     }),
   })
   .openapi('CompatibleClipsResponse')
+
+/**
+ * クリップ並べ替えリクエストスキーマ
+ */
+export const ReorderClipsRequestSchema = z
+  .object({
+    clipIds: z.array(z.string()).openapi({ example: ['clip-abc123', 'clip-def456'] }),
+  })
+  .openapi('ReorderClipsRequest')
+
+/**
+ * クリップ並べ替えレスポンススキーマ
+ */
+export const ReorderClipsResponseSchema = z
+  .object({
+    data: z.object({
+      showReelId: z.string().openapi({ example: 'reel-abc123' }),
+      clipIds: z.array(z.string()).openapi({ example: ['clip-abc123', 'clip-def456'] }),
+      clipCount: z.number().openapi({ example: 2 }),
+      totalDuration: z.string().openapi({ example: '00:01:00:00' }),
+      updatedAt: z.string().datetime().openapi({ example: '2024-01-01T00:00:00.000Z' }),
+    }),
+  })
+  .openapi('ReorderClipsResponse')

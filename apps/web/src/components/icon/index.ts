@@ -1,1 +1,7 @@
 export { AddFill } from './AddFill'
+export { ChevronLeft } from './ChevronLeft'
+export { ClipFill } from './ClipFill'
+export { Close } from './Close'
+export { DeleteFill } from './DeleteFill'
+export { MoreVert } from './MoreVert'
+export { MovieFill } from './MovieFill'

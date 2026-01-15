@@ -28,8 +28,11 @@
     "cleanup": "pnpm format && pnpm lint:fix",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
+    "db:push:web": "DATABASE_PATH=../../apps/web/data.db drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "seed": "tsx scripts/seed.ts"
+    "db:studio:web": "DATABASE_PATH=../../apps/web/data.db drizzle-kit studio",
+    "seed": "tsx scripts/seed.ts",
+    "seed:web": "DATABASE_PATH=../../apps/web/data.db tsx scripts/seed.ts"
   },
   "keywords": [],
   "author": "",

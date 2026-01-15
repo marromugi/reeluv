@@ -5,8 +5,9 @@ import { createApp, setupOpenAPIDoc } from '@/api/route'
 import { registerGetClipById } from '@/api/route/clips/[id]/get'
 import { registerGetClips } from '@/api/route/clips/get'
 import { registerCreateClip } from '@/api/route/clips/post'
-import { registerRemoveClip } from '@/api/route/reels/[id]/clips/[clipId]/delete'
+import { registerRemoveClip } from '@/api/route/reels/[id]/clips/delete'
 import { registerAddClip } from '@/api/route/reels/[id]/clips/post'
+import { registerReorderClips } from '@/api/route/reels/[id]/clips/reorder/put'
 import { registerGetCompatibleClips } from '@/api/route/reels/[id]/compatible-clips/get'
 import { registerDeleteReel } from '@/api/route/reels/[id]/delete'
 import { registerGetReelById } from '@/api/route/reels/[id]/get'
@@ -32,6 +33,7 @@ registerUpdateReelName(app)
 registerDeleteReel(app)
 registerAddClip(app)
 registerRemoveClip(app)
+registerReorderClips(app)
 registerGetCompatibleClips(app)
 
 // Clipsルートを登録
