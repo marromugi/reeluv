@@ -25,7 +25,7 @@ export function createTestDatabaseClient(): DatabaseClient {
  * ```typescript
  * import { resolve } from 'node:path'
  *
- * const migrationsFolder = resolve(import.meta.dirname, 'node_modules/@database/core/drizzle')
+ * const migrationsFolder = resolve(import.meta.dirname, 'node_modules/@reeluv/database-core/drizzle')
  * setupTestTables(db, migrationsFolder)
  * ```
  */
@@ -45,7 +45,7 @@ export function setupTestTables(
  * ```typescript
  * import { resolve } from 'node:path'
  *
- * const migrationsFolder = resolve(import.meta.dirname, 'node_modules/@database/core/drizzle')
+ * const migrationsFolder = resolve(import.meta.dirname, 'node_modules/@reeluv/database-core/drizzle')
  * const db = setupTestDatabase(migrationsFolder)
  * ```
  */

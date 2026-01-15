@@ -1,4 +1,4 @@
-import { videoClips } from '@database/core'
+import { videoClips } from '@reeluv/database-core'
 
 import { Timecode } from '../../../../domain/shared/valueObject/Timecode'
 import { VideoDefinition } from '../../../../domain/shared/valueObject/VideoDefinition'

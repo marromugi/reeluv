@@ -3,7 +3,7 @@ import {
   showReelClips,
   type VideoClip as VideoClipRecord,
   type DatabaseClient,
-} from '@database/core'
+} from '@reeluv/database-core'
 import { eq, and, inArray, isNull, isNotNull, sql } from 'drizzle-orm'
 
 import { Timecode } from '../../../domain/shared/valueObject/Timecode'

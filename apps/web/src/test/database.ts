@@ -1,4 +1,4 @@
-import type { DatabaseClient } from '@database/core'
+import type { DatabaseClient } from '@reeluv/database-core'
 
 /**
  * テスト用のデータベースクライアントを取得

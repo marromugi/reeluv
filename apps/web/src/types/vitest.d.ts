@@ -14,5 +14,5 @@ declare module 'vitest/browser' {
  * @see {@link file://../test/database.ts} getTestDB
  */
 declare global {
-  var __TEST_DB__: import('@database/core').DatabaseClient
+  var __TEST_DB__: import('@reeluv/database-core').DatabaseClient
 }

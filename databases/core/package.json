@@ -1,5 +1,5 @@
 {
-  "name": "@database/core",
+  "name": "@reeluv/database-core",
   "version": "1.0.0",
   "description": "",
   "type": "module",

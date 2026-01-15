@@ -1,4 +1,4 @@
-import type { DatabaseClient } from '@database/core'
+import type { DatabaseClient } from '@reeluv/database-core'
 import { OpenAPIHono } from '@hono/zod-openapi'
 
 import { errorHandler } from './_shared/errorHandler'

@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "turbo test",
-    "cleanup": "pnpm format && pnpm lint:fix"
+    "cleanup": "pnpm format && pnpm lint:fix",
+    "startup": "tsx scripts/setup.ts && pnpm --filter web dev"
   },
   "keywords": [],
   "author": "",

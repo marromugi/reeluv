@@ -1,4 +1,4 @@
-import { createDatabaseClient } from '@database/core'
+import { createDatabaseClient } from '@reeluv/database-core'
 import { handle } from 'hono/vercel'
 
 import { createApp, setupOpenAPIDoc } from '@/api/route'

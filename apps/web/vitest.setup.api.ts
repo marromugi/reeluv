@@ -5,11 +5,11 @@
  */
 import { resolve } from 'node:path'
 
-import { setupTestDatabase, type DatabaseClient } from '@database/core'
+import { setupTestDatabase, type DatabaseClient } from '@reeluv/database-core'
 import { beforeEach } from 'vitest'
 
 /**
- * @database/core パッケージのマイグレーションフォルダパス
+ * @reeluv/database-core パッケージのマイグレーションフォルダパス
  */
 const MIGRATIONS_FOLDER = resolve(process.cwd(), '../../databases/core/drizzle')
 

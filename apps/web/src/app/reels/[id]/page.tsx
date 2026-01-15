@@ -1,7 +1,5 @@
 import { ReelEditPage } from '@/components/page/ReelEdit'
 
-export const dynamic = 'force-dynamic'
-
 type Props = {
   params: Promise<{ id: string }>
 }
