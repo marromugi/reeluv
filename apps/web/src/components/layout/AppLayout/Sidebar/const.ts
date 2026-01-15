@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react'
 
-import { MovieFill, ClipFill } from '@/components/icon'
+import { MovieFill } from '@/components/icon'
 
 export type NavItem = {
   href: string
@@ -13,10 +13,5 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/reels',
     icon: MovieFill,
     label: 'ショーリール',
-  },
-  {
-    href: '/clips',
-    icon: ClipFill,
-    label: 'クリップ',
   },
 ]

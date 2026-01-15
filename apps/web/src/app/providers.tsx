@@ -1,5 +1,6 @@
 'use client'
 
+import { ThemeProvider } from 'next-themes'
 import type { ReactNode } from 'react'
 import { SWRConfig } from 'swr'
 
@@ -8,5 +9,9 @@ type ProvidersProps = {
 }
 
 export const Providers = ({ children }: ProvidersProps) => {
-  return <SWRConfig value={{}}>{children}</SWRConfig>
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <SWRConfig value={{}}>{children}</SWRConfig>
+    </ThemeProvider>
+  )
 }

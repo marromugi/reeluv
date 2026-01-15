@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from './providers'
 
+import clsx from 'clsx'
+
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
@@ -16,8 +18,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja">
-      <body className={`antialiased`}>
+    <html lang="ja" suppressHydrationWarning>
+      <body
+        className={clsx(`antialiased`, 'bg-neutral-100 dark:bg-neutral-950 min-w-screen min-h-dvh')}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
