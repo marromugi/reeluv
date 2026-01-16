@@ -15,6 +15,8 @@ export const ThemeToggleButton = () => {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // マウント時にのみ実行するため ignore
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, [])
 

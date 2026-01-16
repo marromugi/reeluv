@@ -20,11 +20,10 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "turbo lint",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "turbo test",
     "cleanup": "pnpm format && pnpm lint:fix",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",

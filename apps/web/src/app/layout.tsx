@@ -1,9 +1,8 @@
+import clsx from 'clsx'
 import type { Metadata } from 'next'
 
 import './globals.css'
 import { Providers } from './providers'
-
-import clsx from 'clsx'
 
 export const dynamic = 'force-dynamic'
 
