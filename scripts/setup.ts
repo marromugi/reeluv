@@ -8,5 +8,6 @@ const run = (command: string, label: string) => {
 
 run('pnpm --filter @reeluv/database-core db:push:web', 'データベースのマイグレーション')
 run('pnpm --filter @reeluv/database-core seed:web', 'シードデータの投入')
+run('pnpm --filter @reeluv/database-core build', 'データベースクライアントのビルド')
 
 console.log('\n🎉 セットアップが完了しました！')
