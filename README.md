@@ -98,9 +98,14 @@ pnpm storybook
 
 ```bash
 pnpm test        # 全テスト実行
+```
+
+以下 `apps/web` 配下で実行できます。
+
+```bash
+pnpm test:unit   # ユニットテスト
 pnpm test:ui     # UI テスト
 pnpm test:api    # API テスト
-pnpm test:vrt    # ビジュアルリグレッションテスト
 ```
 
 ### リント・フォーマット
