@@ -14,4 +14,3 @@ export const timelineRulerVariants = tv({
     markLine: 'h-2 w-px bg-neutral-400 dark:bg-neutral-600',
   },
 })
-

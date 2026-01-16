@@ -9,7 +9,12 @@ import { Typography } from '@/components/ui/Typography'
 export const Header = () => {
   return (
     <header className="flex h-14 items-center justify-between border-b border-neutral-200 px-6 dark:border-neutral-800">
-      <Typography as="span" weight="bold" variant="fill" className="text-neutral-900 dark:text-white">
+      <Typography
+        as="span"
+        weight="bold"
+        variant="fill"
+        className="text-neutral-900 dark:text-white"
+      >
         reeluv
       </Typography>
       <ThemeToggleButton />

@@ -151,7 +151,11 @@ export const AddClipRequestSchema = z
  */
 export const RemoveClipRequestSchema = z
   .object({
-    index: z.number().int().min(0).openapi({ example: 0, description: '削除するクリップのインデックス（0始まり）' }),
+    index: z
+      .number()
+      .int()
+      .min(0)
+      .openapi({ example: 0, description: '削除するクリップのインデックス（0始まり）' }),
   })
   .openapi('RemoveClipRequest')
 
@@ -182,7 +186,9 @@ export const RemoveClipOperationResponseSchema = z
   .object({
     data: z.object({
       showReelId: z.string().openapi({ example: 'reel-abc123' }),
-      clipIndex: z.number().openapi({ example: 0, description: '削除されたクリップのインデックス' }),
+      clipIndex: z
+        .number()
+        .openapi({ example: 0, description: '削除されたクリップのインデックス' }),
       clipCount: z.number().openapi({ example: 4 }),
       totalDuration: z.string().openapi({ example: '00:04:30:00' }),
       updatedAt: z.string().datetime().openapi({ example: '2024-01-01T00:00:00.000Z' }),

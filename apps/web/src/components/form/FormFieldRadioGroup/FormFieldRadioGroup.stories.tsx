@@ -54,7 +54,11 @@ export const Default: Story = {
     <FormFieldRadioGroup {...args}>
       <RadioGroupItem value="free" label="無料プラン" description="基本機能のみ" />
       <RadioGroupItem value="pro" label="プロプラン" description="全機能利用可能" />
-      <RadioGroupItem value="enterprise" label="エンタープライズ" description="カスタムサポート付き" />
+      <RadioGroupItem
+        value="enterprise"
+        label="エンタープライズ"
+        description="カスタムサポート付き"
+      />
     </FormFieldRadioGroup>
   ),
 }

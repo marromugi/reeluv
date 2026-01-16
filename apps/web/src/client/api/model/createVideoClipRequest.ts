@@ -5,16 +5,16 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateVideoClipRequestVideoStandard } from './createVideoClipRequestVideoStandard';
-import type { CreateVideoClipRequestVideoDefinition } from './createVideoClipRequestVideoDefinition';
+import type { CreateVideoClipRequestVideoStandard } from './createVideoClipRequestVideoStandard'
+import type { CreateVideoClipRequestVideoDefinition } from './createVideoClipRequestVideoDefinition'
 
 export interface CreateVideoClipRequest {
   /** @minLength 1 */
-  name: string;
+  name: string
   /** @nullable */
-  description?: string | null;
-  videoStandard: CreateVideoClipRequestVideoStandard;
-  videoDefinition: CreateVideoClipRequestVideoDefinition;
-  startTimecode: string;
-  endTimecode: string;
+  description?: string | null
+  videoStandard: CreateVideoClipRequestVideoStandard
+  videoDefinition: CreateVideoClipRequestVideoDefinition
+  startTimecode: string
+  endTimecode: string
 }

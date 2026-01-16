@@ -50,10 +50,7 @@ export const TimelineClip = ({
       {...listeners}
     >
       {/* 削除ボタン（ホバー時に表示） */}
-      <div
-        className={styles.deleteButton()}
-        onPointerDown={(e) => e.stopPropagation()}
-      >
+      <div className={styles.deleteButton()} onPointerDown={(e) => e.stopPropagation()}>
         <IconButton
           icon={Close}
           variant="solid"

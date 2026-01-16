@@ -1,6 +1,10 @@
 import { createRoute } from '@hono/zod-openapi'
 
-import { ReorderClipsRequestSchema, ReorderClipsResponseSchema, ShowReelIdParamSchema } from '../../../schema'
+import {
+  ReorderClipsRequestSchema,
+  ReorderClipsResponseSchema,
+  ShowReelIdParamSchema,
+} from '../../../schema'
 
 import { ReorderClipsInShowReelUseCase } from '@/api/application/showReel/ReorderClipsInShowReelUseCase'
 import { DrizzleShowReelRepository } from '@/api/infrastructure/repository/showReel/DrizzleShowReelRepository'

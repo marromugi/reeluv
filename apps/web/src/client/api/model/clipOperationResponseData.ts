@@ -7,9 +7,9 @@
  */
 
 export type ClipOperationResponseData = {
-  showReelId: string;
-  clipId: string;
-  clipCount: number;
-  totalDuration: string;
-  updatedAt: string;
-};
+  showReelId: string
+  clipId: string
+  clipCount: number
+  totalDuration: string
+  updatedAt: string
+}

@@ -7,7 +7,7 @@
  */
 
 export type UpdateShowReelNameResponseData = {
-  id: string;
-  name: string;
-  updatedAt: string;
-};
+  id: string
+  name: string
+  updatedAt: string
+}

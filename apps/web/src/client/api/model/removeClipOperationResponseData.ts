@@ -7,10 +7,10 @@
  */
 
 export type RemoveClipOperationResponseData = {
-  showReelId: string;
+  showReelId: string
   /** 削除されたクリップのインデックス */
-  clipIndex: number;
-  clipCount: number;
-  totalDuration: string;
-  updatedAt: string;
-};
+  clipIndex: number
+  clipCount: number
+  totalDuration: string
+  updatedAt: string
+}

@@ -6,11 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type CreateShowReelRequestVideoDefinition = typeof CreateShowReelRequestVideoDefinition[keyof typeof CreateShowReelRequestVideoDefinition];
-
+export type CreateShowReelRequestVideoDefinition =
+  (typeof CreateShowReelRequestVideoDefinition)[keyof typeof CreateShowReelRequestVideoDefinition]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateShowReelRequestVideoDefinition = {
   SD: 'SD',
   HD: 'HD',
-} as const;
+} as const

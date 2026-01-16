@@ -9,8 +9,8 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write ./apps/**/*.{ts,tsx} ./databases/**/*.ts",
+    "format:check": "prettier --check ./apps/**/*.{ts,tsx} ./databases/**/*.ts",
     "test": "turbo test",
     "cleanup": "pnpm format && pnpm lint:fix",
     "startup": "tsx scripts/setup.ts && pnpm --filter web dev"

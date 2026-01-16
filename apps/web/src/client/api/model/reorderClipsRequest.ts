@@ -7,5 +7,5 @@
  */
 
 export interface ReorderClipsRequest {
-  clipIds: string[];
+  clipIds: string[]
 }

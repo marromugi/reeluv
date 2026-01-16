@@ -5,16 +5,16 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { ShowReelClip } from './showReelClip';
+import type { ShowReelClip } from './showReelClip'
 
 export interface ShowReelDetail {
-  id: string;
-  name: string;
-  videoStandard: string;
-  videoDefinition: string;
-  clips: ShowReelClip[];
-  clipCount: number;
-  totalDuration: string;
-  createdAt: string;
-  updatedAt: string;
+  id: string
+  name: string
+  videoStandard: string
+  videoDefinition: string
+  clips: ShowReelClip[]
+  clipCount: number
+  totalDuration: string
+  createdAt: string
+  updatedAt: string
 }

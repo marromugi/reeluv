@@ -7,9 +7,9 @@
  */
 
 export type ReorderClipsResponseData = {
-  showReelId: string;
-  clipIds: string[];
-  clipCount: number;
-  totalDuration: string;
-  updatedAt: string;
-};
+  showReelId: string
+  clipIds: string[]
+  clipCount: number
+  totalDuration: string
+  updatedAt: string
+}

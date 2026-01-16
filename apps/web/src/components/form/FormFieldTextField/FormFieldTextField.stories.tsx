@@ -178,7 +178,12 @@ export const FormExample: Story = {
   render: () => (
     <form className="flex flex-col gap-4">
       <FormFieldTextField label="メールアドレス" placeholder="example@example.com" required />
-      <FormFieldTextField label="パスワード" placeholder="パスワードを入力" type="password" required />
+      <FormFieldTextField
+        label="パスワード"
+        placeholder="パスワードを入力"
+        type="password"
+        required
+      />
       <FormFieldTextField label="自己紹介（任意）" placeholder="自己紹介を入力" />
     </form>
   ),

@@ -8,5 +8,5 @@
 
 export interface UpdateShowReelNameRequest {
   /** @minLength 1 */
-  name: string;
+  name: string
 }

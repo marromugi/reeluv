@@ -5,8 +5,8 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { ShowReelListResponseData } from './showReelListResponseData';
+import type { ShowReelListResponseData } from './showReelListResponseData'
 
 export interface ShowReelListResponse {
-  data: ShowReelListResponseData;
+  data: ShowReelListResponseData
 }

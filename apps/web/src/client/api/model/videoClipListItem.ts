@@ -7,13 +7,13 @@
  */
 
 export interface VideoClipListItem {
-  id: string;
-  name: string;
+  id: string
+  name: string
   /** @nullable */
-  description: string | null;
-  videoStandard: string;
-  videoDefinition: string;
-  startTimecode: string;
-  endTimecode: string;
-  duration: string;
+  description: string | null
+  videoStandard: string
+  videoDefinition: string
+  startTimecode: string
+  endTimecode: string
+  duration: string
 }

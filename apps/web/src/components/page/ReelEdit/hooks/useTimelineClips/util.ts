@@ -2,7 +2,6 @@ import type { Action, State, TimelineClipItem } from './type'
 
 import type { ShowReelClip } from '@/client/api/model'
 
-
 /** ユニークIDを生成するカウンター */
 let uidCounter = 0
 

@@ -6,11 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type CreateShowReelRequestVideoStandard = typeof CreateShowReelRequestVideoStandard[keyof typeof CreateShowReelRequestVideoStandard];
-
+export type CreateShowReelRequestVideoStandard =
+  (typeof CreateShowReelRequestVideoStandard)[keyof typeof CreateShowReelRequestVideoStandard]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateShowReelRequestVideoStandard = {
   PAL: 'PAL',
   NTSC: 'NTSC',
-} as const;
+} as const

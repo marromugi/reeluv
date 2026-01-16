@@ -5,11 +5,11 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { GetApiReelsIdCompatibleClips404Error } from './getApiReelsIdCompatibleClips404Error';
+import type { GetApiReelsIdCompatibleClips404Error } from './getApiReelsIdCompatibleClips404Error'
 
 /**
  * リソースが見つかりません
  */
 export type GetApiReelsIdCompatibleClips404 = {
-  error: GetApiReelsIdCompatibleClips404Error;
-};
+  error: GetApiReelsIdCompatibleClips404Error
+}

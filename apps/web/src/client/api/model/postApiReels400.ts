@@ -5,11 +5,11 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiReels400Error } from './postApiReels400Error';
+import type { PostApiReels400Error } from './postApiReels400Error'
 
 /**
  * リクエストが不正です
  */
 export type PostApiReels400 = {
-  error: PostApiReels400Error;
-};
+  error: PostApiReels400Error
+}

@@ -11,5 +11,5 @@ export interface RemoveClipRequest {
    * 削除するクリップのインデックス（0始まり）
    * @minimum 0
    */
-  index: number;
+  index: number
 }

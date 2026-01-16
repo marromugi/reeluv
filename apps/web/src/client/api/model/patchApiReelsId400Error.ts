@@ -8,7 +8,7 @@
 
 export type PatchApiReelsId400Error = {
   /** エラーコード */
-  code: string;
+  code: string
   /** エラーメッセージ */
-  message: string;
-};
+  message: string
+}

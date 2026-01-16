@@ -7,12 +7,12 @@
  */
 
 export interface ShowReelListItem {
-  id: string;
-  name: string;
-  videoStandard: string;
-  videoDefinition: string;
-  clipCount: number;
-  totalDuration: string;
-  createdAt: string;
-  updatedAt: string;
+  id: string
+  name: string
+  videoStandard: string
+  videoDefinition: string
+  clipCount: number
+  totalDuration: string
+  createdAt: string
+  updatedAt: string
 }

@@ -7,5 +7,5 @@
  */
 
 export interface AddClipRequest {
-  clipId: string;
+  clipId: string
 }

@@ -5,8 +5,8 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { ReorderClipsResponseData } from './reorderClipsResponseData';
+import type { ReorderClipsResponseData } from './reorderClipsResponseData'
 
 export interface ReorderClipsResponse {
-  data: ReorderClipsResponseData;
+  data: ReorderClipsResponseData
 }

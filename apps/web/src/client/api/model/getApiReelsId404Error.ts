@@ -8,7 +8,7 @@
 
 export type GetApiReelsId404Error = {
   /** エラーコード */
-  code: string;
+  code: string
   /** エラーメッセージ */
-  message: string;
-};
+  message: string
+}

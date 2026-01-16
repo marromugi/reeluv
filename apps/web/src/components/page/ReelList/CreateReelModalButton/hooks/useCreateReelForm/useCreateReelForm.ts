@@ -19,8 +19,7 @@ type UseCreateReelFormOptions = {
 export const useCreateReelForm = ({ onSuccess }: UseCreateReelFormOptions = {}) => {
   const [name, setName] = useState('')
   const [videoStandard, setVideoStandard] = useState<CreateShowReelRequestVideoStandard>('NTSC')
-  const [videoDefinition, setVideoDefinition] =
-    useState<CreateShowReelRequestVideoDefinition>('HD')
+  const [videoDefinition, setVideoDefinition] = useState<CreateShowReelRequestVideoDefinition>('HD')
 
   const { mutate } = useSWRConfig()
   const { trigger, isMutating } = usePostApiReels()

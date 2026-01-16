@@ -5,18 +5,10 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import {
-  faker
-} from '@faker-js/faker';
+import { faker } from '@faker-js/faker'
 
-import {
-  HttpResponse,
-  delay,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
+import { HttpResponse, delay, http } from 'msw'
+import type { RequestHandlerOptions } from 'msw'
 
 import type {
   AddClipOperationResponse,
@@ -27,135 +19,411 @@ import type {
   ReorderClipsResponse,
   ShowReelDetailResponse,
   ShowReelListResponse,
-  UpdateShowReelNameResponse
-} from '.././model';
+  UpdateShowReelNameResponse,
+} from '.././model'
 
-
-export const getGetApiReelsResponseMock = (overrideResponse: Partial< ShowReelListResponse > = {}): ShowReelListResponse => ({data: {showReels: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), videoStandard: faker.string.alpha({length: {min: 10, max: 20}}), videoDefinition: faker.string.alpha({length: {min: 10, max: 20}}), clipCount: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), totalDuration: faker.string.alpha({length: {min: 10, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}))}, ...overrideResponse})
-
-export const getPostApiReelsResponseMock = (overrideResponse: Partial< CreateShowReelResponse > = {}): CreateShowReelResponse => ({data: {id: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), videoStandard: faker.string.alpha({length: {min: 10, max: 20}}), videoDefinition: faker.string.alpha({length: {min: 10, max: 20}}), clipCount: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), totalDuration: faker.string.alpha({length: {min: 10, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getGetApiReelsIdResponseMock = (overrideResponse: Partial< ShowReelDetailResponse > = {}): ShowReelDetailResponse => ({data: {id: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), videoStandard: faker.string.alpha({length: {min: 10, max: 20}}), videoDefinition: faker.string.alpha({length: {min: 10, max: 20}}), clips: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), description: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), null]), videoStandard: faker.string.alpha({length: {min: 10, max: 20}}), videoDefinition: faker.string.alpha({length: {min: 10, max: 20}}), startTimecode: faker.string.alpha({length: {min: 10, max: 20}}), endTimecode: faker.string.alpha({length: {min: 10, max: 20}}), duration: faker.string.alpha({length: {min: 10, max: 20}})})), clipCount: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), totalDuration: faker.string.alpha({length: {min: 10, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getPatchApiReelsIdResponseMock = (overrideResponse: Partial< UpdateShowReelNameResponse > = {}): UpdateShowReelNameResponse => ({data: {id: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getDeleteApiReelsIdResponseMock = (overrideResponse: Partial< DeleteShowReelResponse > = {}): DeleteShowReelResponse => ({data: {id: faker.string.alpha({length: {min: 10, max: 20}}), deleted: faker.datatype.boolean()}, ...overrideResponse})
-
-export const getPostApiReelsIdClipsResponseMock = (overrideResponse: Partial< AddClipOperationResponse > = {}): AddClipOperationResponse => ({data: {showReelId: faker.string.alpha({length: {min: 10, max: 20}}), clipId: faker.string.alpha({length: {min: 10, max: 20}}), clipCount: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), totalDuration: faker.string.alpha({length: {min: 10, max: 20}}), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getDeleteApiReelsIdClipsResponseMock = (overrideResponse: Partial< RemoveClipOperationResponse > = {}): RemoveClipOperationResponse => ({data: {showReelId: faker.string.alpha({length: {min: 10, max: 20}}), clipIndex: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), clipCount: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), totalDuration: faker.string.alpha({length: {min: 10, max: 20}}), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getPutApiReelsIdClipsReorderResponseMock = (overrideResponse: Partial< ReorderClipsResponse > = {}): ReorderClipsResponse => ({data: {showReelId: faker.string.alpha({length: {min: 10, max: 20}}), clipIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))), clipCount: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), totalDuration: faker.string.alpha({length: {min: 10, max: 20}}), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getGetApiReelsIdCompatibleClipsResponseMock = (overrideResponse: Partial< CompatibleClipsResponse > = {}): CompatibleClipsResponse => ({data: {clips: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), description: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), null]), videoStandard: faker.string.alpha({length: {min: 10, max: 20}}), videoDefinition: faker.string.alpha({length: {min: 10, max: 20}}), startTimecode: faker.string.alpha({length: {min: 10, max: 20}}), endTimecode: faker.string.alpha({length: {min: 10, max: 20}}), duration: faker.string.alpha({length: {min: 10, max: 20}})}))}, ...overrideResponse})
-
-
-export const getGetApiReelsMockHandler = (overrideResponse?: ShowReelListResponse | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ShowReelListResponse> | ShowReelListResponse), options?: RequestHandlerOptions) => {
-  return http.get('*/api/reels', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetApiReelsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
+export const getGetApiReelsResponseMock = (
+  overrideResponse: Partial<ShowReelListResponse> = {}
+): ShowReelListResponse => ({
+  data: {
+    showReels: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+      () => ({
+        id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        videoStandard: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        videoDefinition: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        clipCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+        totalDuration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
       })
-  }, options)
+    ),
+  },
+  ...overrideResponse,
+})
+
+export const getPostApiReelsResponseMock = (
+  overrideResponse: Partial<CreateShowReelResponse> = {}
+): CreateShowReelResponse => ({
+  data: {
+    id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    videoStandard: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    videoDefinition: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    clipCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    totalDuration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+    updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  },
+  ...overrideResponse,
+})
+
+export const getGetApiReelsIdResponseMock = (
+  overrideResponse: Partial<ShowReelDetailResponse> = {}
+): ShowReelDetailResponse => ({
+  data: {
+    id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    videoStandard: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    videoDefinition: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    clips: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+      () => ({
+        id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        description: faker.helpers.arrayElement([
+          faker.string.alpha({ length: { min: 10, max: 20 } }),
+          null,
+        ]),
+        videoStandard: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        videoDefinition: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        startTimecode: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        endTimecode: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        duration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      })
+    ),
+    clipCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    totalDuration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+    updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  },
+  ...overrideResponse,
+})
+
+export const getPatchApiReelsIdResponseMock = (
+  overrideResponse: Partial<UpdateShowReelNameResponse> = {}
+): UpdateShowReelNameResponse => ({
+  data: {
+    id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  },
+  ...overrideResponse,
+})
+
+export const getDeleteApiReelsIdResponseMock = (
+  overrideResponse: Partial<DeleteShowReelResponse> = {}
+): DeleteShowReelResponse => ({
+  data: {
+    id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    deleted: faker.datatype.boolean(),
+  },
+  ...overrideResponse,
+})
+
+export const getPostApiReelsIdClipsResponseMock = (
+  overrideResponse: Partial<AddClipOperationResponse> = {}
+): AddClipOperationResponse => ({
+  data: {
+    showReelId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    clipId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    clipCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    totalDuration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  },
+  ...overrideResponse,
+})
+
+export const getDeleteApiReelsIdClipsResponseMock = (
+  overrideResponse: Partial<RemoveClipOperationResponse> = {}
+): RemoveClipOperationResponse => ({
+  data: {
+    showReelId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    clipIndex: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    clipCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    totalDuration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  },
+  ...overrideResponse,
+})
+
+export const getPutApiReelsIdClipsReorderResponseMock = (
+  overrideResponse: Partial<ReorderClipsResponse> = {}
+): ReorderClipsResponse => ({
+  data: {
+    showReelId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    clipIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+      () => faker.string.alpha({ length: { min: 10, max: 20 } })
+    ),
+    clipCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    totalDuration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  },
+  ...overrideResponse,
+})
+
+export const getGetApiReelsIdCompatibleClipsResponseMock = (
+  overrideResponse: Partial<CompatibleClipsResponse> = {}
+): CompatibleClipsResponse => ({
+  data: {
+    clips: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+      () => ({
+        id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        description: faker.helpers.arrayElement([
+          faker.string.alpha({ length: { min: 10, max: 20 } }),
+          null,
+        ]),
+        videoStandard: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        videoDefinition: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        startTimecode: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        endTimecode: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        duration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      })
+    ),
+  },
+  ...overrideResponse,
+})
+
+export const getGetApiReelsMockHandler = (
+  overrideResponse?:
+    | ShowReelListResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<ShowReelListResponse> | ShowReelListResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.get(
+    '*/api/reels',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetApiReelsResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getPostApiReelsMockHandler = (overrideResponse?: CreateShowReelResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateShowReelResponse> | CreateShowReelResponse), options?: RequestHandlerOptions) => {
-  return http.post('*/api/reels', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getPostApiReelsResponseMock()),
-      { status: 201,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getPostApiReelsMockHandler = (
+  overrideResponse?:
+    | CreateShowReelResponse
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0]
+      ) => Promise<CreateShowReelResponse> | CreateShowReelResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.post(
+    '*/api/reels',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getPostApiReelsResponseMock()
+        ),
+        { status: 201, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getGetApiReelsIdMockHandler = (overrideResponse?: ShowReelDetailResponse | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ShowReelDetailResponse> | ShowReelDetailResponse), options?: RequestHandlerOptions) => {
-  return http.get('*/api/reels/:id', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetApiReelsIdResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getGetApiReelsIdMockHandler = (
+  overrideResponse?:
+    | ShowReelDetailResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<ShowReelDetailResponse> | ShowReelDetailResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.get(
+    '*/api/reels/:id',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetApiReelsIdResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getPatchApiReelsIdMockHandler = (overrideResponse?: UpdateShowReelNameResponse | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateShowReelNameResponse> | UpdateShowReelNameResponse), options?: RequestHandlerOptions) => {
-  return http.patch('*/api/reels/:id', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getPatchApiReelsIdResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getPatchApiReelsIdMockHandler = (
+  overrideResponse?:
+    | UpdateShowReelNameResponse
+    | ((
+        info: Parameters<Parameters<typeof http.patch>[1]>[0]
+      ) => Promise<UpdateShowReelNameResponse> | UpdateShowReelNameResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.patch(
+    '*/api/reels/:id',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getPatchApiReelsIdResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getDeleteApiReelsIdMockHandler = (overrideResponse?: DeleteShowReelResponse | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteShowReelResponse> | DeleteShowReelResponse), options?: RequestHandlerOptions) => {
-  return http.delete('*/api/reels/:id', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getDeleteApiReelsIdResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getDeleteApiReelsIdMockHandler = (
+  overrideResponse?:
+    | DeleteShowReelResponse
+    | ((
+        info: Parameters<Parameters<typeof http.delete>[1]>[0]
+      ) => Promise<DeleteShowReelResponse> | DeleteShowReelResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.delete(
+    '*/api/reels/:id',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getDeleteApiReelsIdResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getPostApiReelsIdClipsMockHandler = (overrideResponse?: AddClipOperationResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<AddClipOperationResponse> | AddClipOperationResponse), options?: RequestHandlerOptions) => {
-  return http.post('*/api/reels/:id/clips', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getPostApiReelsIdClipsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getPostApiReelsIdClipsMockHandler = (
+  overrideResponse?:
+    | AddClipOperationResponse
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0]
+      ) => Promise<AddClipOperationResponse> | AddClipOperationResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.post(
+    '*/api/reels/:id/clips',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getPostApiReelsIdClipsResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getDeleteApiReelsIdClipsMockHandler = (overrideResponse?: RemoveClipOperationResponse | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<RemoveClipOperationResponse> | RemoveClipOperationResponse), options?: RequestHandlerOptions) => {
-  return http.delete('*/api/reels/:id/clips', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getDeleteApiReelsIdClipsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getDeleteApiReelsIdClipsMockHandler = (
+  overrideResponse?:
+    | RemoveClipOperationResponse
+    | ((
+        info: Parameters<Parameters<typeof http.delete>[1]>[0]
+      ) => Promise<RemoveClipOperationResponse> | RemoveClipOperationResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.delete(
+    '*/api/reels/:id/clips',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getDeleteApiReelsIdClipsResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getPutApiReelsIdClipsReorderMockHandler = (overrideResponse?: ReorderClipsResponse | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<ReorderClipsResponse> | ReorderClipsResponse), options?: RequestHandlerOptions) => {
-  return http.put('*/api/reels/:id/clips/reorder', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getPutApiReelsIdClipsReorderResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getPutApiReelsIdClipsReorderMockHandler = (
+  overrideResponse?:
+    | ReorderClipsResponse
+    | ((
+        info: Parameters<Parameters<typeof http.put>[1]>[0]
+      ) => Promise<ReorderClipsResponse> | ReorderClipsResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.put(
+    '*/api/reels/:id/clips/reorder',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getPutApiReelsIdClipsReorderResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 
-export const getGetApiReelsIdCompatibleClipsMockHandler = (overrideResponse?: CompatibleClipsResponse | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<CompatibleClipsResponse> | CompatibleClipsResponse), options?: RequestHandlerOptions) => {
-  return http.get('*/api/reels/:id/compatible-clips', async (info) => {await delay(1000);
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetApiReelsIdCompatibleClipsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
+export const getGetApiReelsIdCompatibleClipsMockHandler = (
+  overrideResponse?:
+    | CompatibleClipsResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<CompatibleClipsResponse> | CompatibleClipsResponse),
+  options?: RequestHandlerOptions
+) => {
+  return http.get(
+    '*/api/reels/:id/compatible-clips',
+    async (info) => {
+      await delay(1000)
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetApiReelsIdCompatibleClipsResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    },
+    options
+  )
 }
 export const getReelMock = () => [
   getGetApiReelsMockHandler(),
@@ -166,5 +434,5 @@ export const getReelMock = () => [
   getPostApiReelsIdClipsMockHandler(),
   getDeleteApiReelsIdClipsMockHandler(),
   getPutApiReelsIdClipsReorderMockHandler(),
-  getGetApiReelsIdCompatibleClipsMockHandler()
+  getGetApiReelsIdCompatibleClipsMockHandler(),
 ]

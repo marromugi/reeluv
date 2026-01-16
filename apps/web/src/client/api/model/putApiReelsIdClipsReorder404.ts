@@ -5,11 +5,11 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { PutApiReelsIdClipsReorder404Error } from './putApiReelsIdClipsReorder404Error';
+import type { PutApiReelsIdClipsReorder404Error } from './putApiReelsIdClipsReorder404Error'
 
 /**
  * リソースが見つかりません
  */
 export type PutApiReelsIdClipsReorder404 = {
-  error: PutApiReelsIdClipsReorder404Error;
-};
+  error: PutApiReelsIdClipsReorder404Error
+}

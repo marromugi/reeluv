@@ -5,11 +5,11 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import type { DeleteApiReelsIdClipsClipId404Error } from './deleteApiReelsIdClipsClipId404Error';
+import type { DeleteApiReelsIdClipsClipId404Error } from './deleteApiReelsIdClipsClipId404Error'
 
 /**
  * リソースが見つかりません
  */
 export type DeleteApiReelsIdClipsClipId404 = {
-  error: DeleteApiReelsIdClipsClipId404Error;
-};
+  error: DeleteApiReelsIdClipsClipId404Error
+}

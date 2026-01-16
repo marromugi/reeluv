@@ -7,6 +7,6 @@
  */
 
 export type DeleteShowReelResponseData = {
-  id: string;
-  deleted: boolean;
-};
+  id: string
+  deleted: boolean
+}

@@ -9,4 +9,5 @@ export type FormFieldContainerVariantProps = VariantProps<typeof formFieldContai
 /**
  * FormFieldContainer コンポーネントの Props 型定義
  */
-export type FormFieldContainerProps = ComponentPropsWithoutRef<'div'> & FormFieldContainerVariantProps
+export type FormFieldContainerProps = ComponentPropsWithoutRef<'div'> &
+  FormFieldContainerVariantProps

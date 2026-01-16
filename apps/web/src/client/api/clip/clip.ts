@@ -5,16 +5,11 @@
  * ShowReelとVideoClipを管理するAPI
  * OpenAPI spec version: 1.0.0
  */
-import useSwr from 'swr';
-import type {
-  Key,
-  SWRConfiguration
-} from 'swr';
+import useSwr from 'swr'
+import type { Key, SWRConfiguration } from 'swr'
 
-import useSWRMutation from 'swr/mutation';
-import type {
-  SWRMutationConfiguration
-} from 'swr/mutation';
+import useSWRMutation from 'swr/mutation'
+import type { SWRMutationConfiguration } from 'swr/mutation'
 
 import type {
   CreateVideoClipRequest,
@@ -22,33 +17,22 @@ import type {
   GetApiClipsId404,
   PostApiClips400,
   VideoClipDetailResponse,
-  VideoClipListResponse
-} from '.././model';
+  VideoClipListResponse,
+} from '.././model'
 
-import { customFetcher } from '.././fetcher';
+import { customFetcher } from '.././fetcher'
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-  
-  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
-  
 /**
  * VideoClipの一覧を取得します。
  * @summary 全てのVideoClipを取得
  */
-export const getApiClips = (
-    
- options?: SecondParameter<typeof customFetcher>) => {
-    return customFetcher<VideoClipListResponse>(
-    {url: `/api/clips`, method: 'GET'
-    },
-    options);
-  }
+export const getApiClips = (options?: SecondParameter<typeof customFetcher>) => {
+  return customFetcher<VideoClipListResponse>({ url: `/api/clips`, method: 'GET' }, options)
+}
 
-
-
-export const getGetApiClipsKey = () => [`/api/clips`] as const;
+export const getGetApiClipsKey = () => [`/api/clips`] as const
 
 export type GetApiClipsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiClips>>>
 export type GetApiClipsQueryError = unknown
@@ -56,20 +40,24 @@ export type GetApiClipsQueryError = unknown
 /**
  * @summary 全てのVideoClipを取得
  */
-export const useGetApiClips = <TError = unknown>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiClips>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customFetcher> }
-) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+export const useGetApiClips = <TError = unknown>(options?: {
+  swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiClips>>, TError> & {
+    swrKey?: Key
+    enabled?: boolean
+  }
+  request?: SecondParameter<typeof customFetcher>
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiClipsKey() : null);
+  const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiClipsKey() : null))
   const swrFn = () => getApiClips(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
   return {
     swrKey,
-    ...query
+    ...query,
   }
 }
 /**
@@ -77,24 +65,26 @@ export const useGetApiClips = <TError = unknown>(
  * @summary VideoClipを作成
  */
 export const postApiClips = (
-    createVideoClipRequest: CreateVideoClipRequest,
- options?: SecondParameter<typeof customFetcher>) => {
-    return customFetcher<CreateVideoClipResponse>(
-    {url: `/api/clips`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createVideoClipRequest
+  createVideoClipRequest: CreateVideoClipRequest,
+  options?: SecondParameter<typeof customFetcher>
+) => {
+  return customFetcher<CreateVideoClipResponse>(
+    {
+      url: `/api/clips`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createVideoClipRequest,
     },
-    options);
-  }
+    options
+  )
+}
 
-
-
-export const getPostApiClipsMutationFetcher = ( options?: SecondParameter<typeof customFetcher>) => {
+export const getPostApiClipsMutationFetcher = (options?: SecondParameter<typeof customFetcher>) => {
   return (_: Key, { arg }: { arg: CreateVideoClipRequest }) => {
-    return postApiClips(arg, options);
+    return postApiClips(arg, options)
   }
 }
-export const getPostApiClipsMutationKey = () => [`/api/clips`] as const;
+export const getPostApiClipsMutationKey = () => [`/api/clips`] as const
 
 export type PostApiClipsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiClips>>>
 export type PostApiClipsMutationError = PostApiClips400
@@ -102,38 +92,37 @@ export type PostApiClipsMutationError = PostApiClips400
 /**
  * @summary VideoClipを作成
  */
-export const usePostApiClips = <TError = PostApiClips400>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiClips>>, TError, Key, CreateVideoClipRequest, Awaited<ReturnType<typeof postApiClips>>> & { swrKey?: string }, request?: SecondParameter<typeof customFetcher>}
-) => {
+export const usePostApiClips = <TError = PostApiClips400>(options?: {
+  swr?: SWRMutationConfiguration<
+    Awaited<ReturnType<typeof postApiClips>>,
+    TError,
+    Key,
+    CreateVideoClipRequest,
+    Awaited<ReturnType<typeof postApiClips>>
+  > & { swrKey?: string }
+  request?: SecondParameter<typeof customFetcher>
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {}
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
-
-  const swrKey = swrOptions?.swrKey ?? getPostApiClipsMutationKey();
-  const swrFn = getPostApiClipsMutationFetcher(requestOptions);
+  const swrKey = swrOptions?.swrKey ?? getPostApiClipsMutationKey()
+  const swrFn = getPostApiClipsMutationFetcher(requestOptions)
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
   return {
     swrKey,
-    ...query
+    ...query,
   }
 }
 /**
  * VideoClipの詳細を取得します。
  * @summary 指定されたIDのVideoClipを取得
  */
-export const getApiClipsId = (
-    id: string,
- options?: SecondParameter<typeof customFetcher>) => {
-    return customFetcher<VideoClipDetailResponse>(
-    {url: `/api/clips/${id}`, method: 'GET'
-    },
-    options);
-  }
+export const getApiClipsId = (id: string, options?: SecondParameter<typeof customFetcher>) => {
+  return customFetcher<VideoClipDetailResponse>({ url: `/api/clips/${id}`, method: 'GET' }, options)
+}
 
-
-
-export const getGetApiClipsIdKey = (id: string,) => [`/api/clips/${id}`] as const;
+export const getGetApiClipsIdKey = (id: string) => [`/api/clips/${id}`] as const
 
 export type GetApiClipsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiClipsId>>>
 export type GetApiClipsIdQueryError = GetApiClipsId404
@@ -142,18 +131,25 @@ export type GetApiClipsIdQueryError = GetApiClipsId404
  * @summary 指定されたIDのVideoClipを取得
  */
 export const useGetApiClipsId = <TError = GetApiClipsId404>(
-  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiClipsId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customFetcher> }
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiClipsId>>, TError> & {
+      swrKey?: Key
+      enabled?: boolean
+    }
+    request?: SecondParameter<typeof customFetcher>
+  }
 ) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+  const { swr: swrOptions, request: requestOptions } = options ?? {}
 
-  const isEnabled = swrOptions?.enabled !== false && !!(id)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiClipsIdKey(id) : null);
+  const isEnabled = swrOptions?.enabled !== false && !!id
+  const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiClipsIdKey(id) : null))
   const swrFn = () => getApiClipsId(id, requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
   return {
     swrKey,
-    ...query
+    ...query,
   }
 }
