@@ -159,6 +159,7 @@ export const ReadOnly: Story = {
   args: {
     readOnly: true,
     defaultValue: '読み取り専用',
+    'aria-label': '読み取り専用フィールド',
   },
 }
 
@@ -230,7 +231,7 @@ export const AllVariants: Story = {
         <div className="flex flex-col gap-4">
           <TextField placeholder="通常状態" />
           <TextField placeholder="無効状態" disabled />
-          <TextField defaultValue="読み取り専用" readOnly />
+          <TextField defaultValue="読み取り専用" readOnly aria-label="読み取り専用フィールド" />
         </div>
       </div>
     </div>
